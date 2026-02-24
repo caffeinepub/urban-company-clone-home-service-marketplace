@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 5,
+  "projectStateVersion": 7,
   "summary": "Full multi-panel home service marketplace app similar to Urban Company. Includes Customer Mobile App, Technician Mobile App, and Admin Web Panel. Backend uses Firebase (Auth, Firestore, Cloud Messaging). Clean modern UI with white background and blue/purple primary color.",
   "architectural_notes": [
     "Backend: Firebase Auth (phone/OTP), Firestore (realtime DB), Firebase Cloud Messaging (push notifications)",
@@ -140,6 +140,14 @@
       "title": "Ensure the backend's role-based access control correctly identifies admin callers and that the frontend AdminPanel guard (which checks authentication and admin role) does not incorrectly reject valid admin principals. If no admin user exists in the backend, seed or allow the first registered user to be promoted to Admin role.",
       "reqIds": [
         "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-administrator-role-authentication-guard-from-the-adminpanel-page-frontend-src-pages-adminpanel-tsx-so-that-navigating-to-the-admin-route-renders-the-admin-panel-directly-without-showing-the-access-denied-screen-the-panel-should-be-accessible-to-any-user-who-navigates-to-admin-with-no-role-check-no-internet-identity-requirement-and-no-redirect-away-from-the-panel",
+      "title": "Remove the administrator role/authentication guard from the AdminPanel page (frontend/src/pages/AdminPanel.tsx) so that navigating to the /admin route renders the admin panel directly without showing the 'Access Denied' screen. The panel should be accessible to any user who navigates to /admin, with no role check, no Internet Identity requirement, and no redirect away from the panel.",
+      "reqIds": [
+        "REQ-29"
       ],
       "version": 1
     }

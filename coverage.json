@@ -1,43 +1,18 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-24T16:43:59.525Z",
+  "generatedAt": "2026-02-24T18:42:37.329Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
-    "implemented": 3,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
-        "id": "REQ-26",
-        "summary": "Fix the Admin panel routing so that navigating to the /admin path (or equivalent URL) correctly loads the AdminPanel page without redirecting away or showing an access-denied state for legitimate admin users. Ensure App.tsx correctly detects the 'admin' mode from the URL and renders the AdminPanel component.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/App.tsx",
-          "frontend/src/pages/AdminPanel.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/App.tsx",
-          "frontend/src/pages/AdminPanel.tsx"
-        ]
-      },
-      {
-        "id": "REQ-27",
-        "summary": "Add a clearly visible direct link or button on the main landing page (or in the customer app header) to navigate to the Admin panel at the /admin route, so users can discover and access it without manually editing the URL.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/customer/HomeScreen.tsx",
-          "frontend/src/components/customer/AccountView.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/customer/AccountView.tsx"
-        ]
-      },
-      {
-        "id": "REQ-28",
-        "summary": "Ensure the backend's role-based access control correctly identifies admin callers and that the frontend AdminPanel guard (which checks authentication and admin role) does not incorrectly reject valid admin principals. If no admin user exists in the backend, seed or allow the first registered user to be promoted to Admin role.",
+        "id": "REQ-29",
+        "summary": "Remove the administrator role/authentication guard from the AdminPanel page (frontend/src/pages/AdminPanel.tsx) so that navigating to the /admin route renders the admin panel directly without showing the 'Access Denied' screen. The panel should be accessible to any user who navigates to /admin, with no role check, no Internet Identity requirement, and no redirect away from the panel.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/pages/AdminPanel.tsx"
@@ -50,13 +25,9 @@
   },
   "changedFiles": [
     "build-request.json",
-    "build-template/README.md",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/App.tsx",
-    "frontend/src/components/customer/AccountView.tsx",
-    "frontend/src/hooks/useQueries.ts",
     "frontend/src/pages/AdminPanel.tsx",
     "project_state.json",
     "scratch/component-selection.json",

@@ -1,63 +1,23 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix Admin Panel Access and Routing Issue",
+  "title": "Remove admin role gate from Admin panel",
   "requirements": [
     {
-      "id": "REQ-26",
-      "summary": "Fix admin panel routing to correctly load AdminPanel page for /admin path without redirecting legitimate admin users",
+      "id": "REQ-29",
+      "summary": "Remove the administrator role/authentication guard from AdminPanel so /admin is directly accessible without authentication checks",
       "acceptanceCriteria": [
-        "Navigating to the /admin URL renders the Admin panel sidebar and dashboard without being redirected to the customer or technician view.",
-        "The admin role check in AdminPanel.tsx does not incorrectly block access when a user is authenticated via Internet Identity.",
-        "If the user is not yet authenticated, the admin panel shows a login prompt or redirects to Internet Identity login rather than a blank or broken screen.",
-        "After successful Internet Identity login on the admin URL, the admin dashboard is displayed with KPI cards and sidebar navigation."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Fix the admin mode detection logic to correctly parse '/admin' from the URL path (not just hash or query params). Ensure that when the path contains '/admin', the app mode is set to 'admin' and the AdminPanel component is rendered. Verify the component uses the authorization component's role-checking capabilities to determine admin access without false rejections."
-        },
-        {
-          "path": "frontend/src/pages/AdminPanel.tsx",
-          "operation": "modify",
-          "description": "Update the admin access guard to properly handle unauthenticated states by showing a login prompt or triggering Internet Identity login instead of blocking immediately. Ensure the role check uses the authorization component's isCallerAdmin backend method correctly and does not reject valid admin principals. Add a loading state while authentication and role checks are in progress. Verify the component's usage instructions from the authorization component before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-27",
-      "summary": "Add a visible direct link or button to navigate to the Admin panel at /admin route",
-      "acceptanceCriteria": [
-        "A visible 'Admin Panel' link or button is present that navigates to the admin route.",
-        "The link is only shown to users with the Admin role, or is placed in a non-obtrusive location if role cannot be pre-checked."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/customer/HomeScreen.tsx",
-          "operation": "modify",
-          "description": "Add a conditionally-rendered 'Admin Panel' link or button in the customer home screen header that navigates to '/admin'. Show this link only when the current user has the admin role (check via the authorization component's isCallerAdmin method). Position it in a non-obtrusive location such as the top-right corner or within an existing user menu. Verify the authorization component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/customer/AccountView.tsx",
-          "operation": "modify",
-          "description": "Add an 'Admin Panel' menu item in the account navigation menu that appears only for users with the admin role. This item should navigate to '/admin' when clicked. Use the authorization component's isCallerAdmin method to conditionally render the menu item. Verify the authorization component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-28",
-      "summary": "Ensure the frontend AdminPanel guard correctly identifies admin callers and does not reject valid admin principals",
-      "acceptanceCriteria": [
-        "A user with Admin role can load the AdminPanel without being blocked by the role guard.",
-        "The backend exposes a way to assign or verify admin role for a given principal.",
-        "If no admin exists, the backend allows an initial admin bootstrap (e.g., first caller or a hardcoded principal is granted admin role)."
+        "Navigating to /admin loads the AdminPanel component immediately without any authentication prompt.",
+        "The 'Access Denied' screen with the shield icon is never shown when visiting /admin.",
+        "No role check or Internet Identity login is required to view the admin panel.",
+        "All admin sections (Dashboard, Users, Technicians, Bookings, Services, Reports) remain fully functional after removing the gate.",
+        "The 'Back to home' fallback screen is removed or unreachable via /admin."
       ],
       "file_operations": [
         {
           "path": "frontend/src/pages/AdminPanel.tsx",
           "operation": "modify",
-          "description": "Refactor the admin role check to use the backend's isCallerAdmin method provided by the authorization component. Ensure the check waits for both authentication and the role query to complete before deciding to block access. Handle edge cases where the user is authenticated but the role check is still loading. Display appropriate loading states and error messages. If the user is not an admin, show a clear 'Access Denied' message with a link back to the customer app. Verify the authorization component's usage instructions before implementing."
+          "description": "Remove all authentication and admin role checks from the AdminPanel component. Eliminate conditional rendering that shows 'Access Denied' screens or redirects users away from the admin panel. Remove dependencies on useInternetIdentity identity state and isCallerAdmin query. Ensure the component directly renders the AdminLayout with section management UI for any visitor to /admin, without any authentication barriers."
         }
       ]
     }

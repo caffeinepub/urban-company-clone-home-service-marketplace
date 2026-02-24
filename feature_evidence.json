@@ -2,49 +2,8 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-fix-the-admin-panel-routing-so-that-navigating-to-the-admin-path-or-equivalent-url-correctly-loads-the-adminpanel-page-without-redirecting-away-or-showing-an-access-denied-state-for-legitimate-admin-users-ensure-app-tsx-correctly-detects-the-admin-mode-from-the-url-and-renders-the-adminpanel-component",
-      "featureTitle": "Fix the Admin panel routing so that navigating to the /admin path (or equivalent URL) correctly loads the AdminPanel page without redirecting away or showing an access-denied state for legitimate admin users. Ensure App.tsx correctly detects the 'admin' mode from the URL and renders the AdminPanel component.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/pages/AdminPanel.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "user-approval@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-26"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-clearly-visible-direct-link-or-button-on-the-main-landing-page-or-in-the-customer-app-header-to-navigate-to-the-admin-panel-at-the-admin-route-so-users-can-discover-and-access-it-without-manually-editing-the-url",
-      "featureTitle": "Add a clearly visible direct link or button on the main landing page (or in the customer app header) to navigate to the Admin panel at the /admin route, so users can discover and access it without manually editing the URL.",
-      "files": [
-        "frontend/src/components/customer/AccountView.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "user-approval@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-27"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-ensure-the-backend-s-role-based-access-control-correctly-identifies-admin-callers-and-that-the-frontend-adminpanel-guard-which-checks-authentication-and-admin-role-does-not-incorrectly-reject-valid-admin-principals-if-no-admin-user-exists-in-the-backend-seed-or-allow-the-first-registered-user-to-be-promoted-to-admin-role",
-      "featureTitle": "Ensure the backend's role-based access control correctly identifies admin callers and that the frontend AdminPanel guard (which checks authentication and admin role) does not incorrectly reject valid admin principals. If no admin user exists in the backend, seed or allow the first registered user to be promoted to Admin role.",
+      "featureId": "feature-remove-the-administrator-role-authentication-guard-from-the-adminpanel-page-frontend-src-pages-adminpanel-tsx-so-that-navigating-to-the-admin-route-renders-the-admin-panel-directly-without-showing-the-access-denied-screen-the-panel-should-be-accessible-to-any-user-who-navigates-to-admin-with-no-role-check-no-internet-identity-requirement-and-no-redirect-away-from-the-panel",
+      "featureTitle": "Remove the administrator role/authentication guard from the AdminPanel page (frontend/src/pages/AdminPanel.tsx) so that navigating to the /admin route renders the admin panel directly without showing the 'Access Denied' screen. The panel should be accessible to any user who navigates to /admin, with no role check, no Internet Identity requirement, and no redirect away from the panel.",
       "files": [
         "frontend/src/pages/AdminPanel.tsx"
       ],
@@ -58,7 +17,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-28"
+        "REQ-29"
       ],
       "confidence": "high"
     }

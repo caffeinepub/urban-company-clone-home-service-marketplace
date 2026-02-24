@@ -1,71 +1,39 @@
 {
   "kind": "build_request",
-  "title": "Fix Admin Panel Access and Routing Issue",
+  "title": "Remove admin role gate — make Admin panel directly accessible without authentication check",
   "priority": "high",
   "requirements": [
     {
-      "id": "REQ-26",
-      "text": "Fix the Admin panel routing so that navigating to the /admin path (or equivalent URL) correctly loads the AdminPanel page without redirecting away or showing an access-denied state for legitimate admin users. Ensure App.tsx correctly detects the 'admin' mode from the URL and renders the AdminPanel component.",
+      "id": "REQ-29",
+      "text": "Remove the administrator role/authentication guard from the AdminPanel page (frontend/src/pages/AdminPanel.tsx) so that navigating to the /admin route renders the admin panel directly without showing the 'Access Denied' screen. The panel should be accessible to any user who navigates to /admin, with no role check, no Internet Identity requirement, and no redirect away from the panel.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-1",
+          "msg-2"
         ],
         "quotes": [
-          "i don't acces admin panel"
+          "Access Denied — You don't have administrator privileges",
+          "I'll remove the strict role gate so the Admin panel at /admin is directly accessible without requiring a pre-existing admin account."
         ]
       },
       "acceptanceCriteria": [
-        "Navigating to the /admin URL renders the Admin panel sidebar and dashboard without being redirected to the customer or technician view.",
-        "The admin role check in AdminPanel.tsx does not incorrectly block access when a user is authenticated via Internet Identity.",
-        "If the user is not yet authenticated, the admin panel shows a login prompt or redirects to Internet Identity login rather than a blank or broken screen.",
-        "After successful Internet Identity login on the admin URL, the admin dashboard is displayed with KPI cards and sidebar navigation."
-      ]
-    },
-    {
-      "id": "REQ-27",
-      "text": "Add a clearly visible direct link or button on the main landing page (or in the customer app header) to navigate to the Admin panel at the /admin route, so users can discover and access it without manually editing the URL.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "i don't acces admin panel"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A visible 'Admin Panel' link or button is present that navigates to the admin route.",
-        "The link is only shown to users with the Admin role, or is placed in a non-obtrusive location if role cannot be pre-checked."
-      ]
-    },
-    {
-      "id": "REQ-28",
-      "text": "Ensure the backend's role-based access control correctly identifies admin callers and that the frontend AdminPanel guard (which checks authentication and admin role) does not incorrectly reject valid admin principals. If no admin user exists in the backend, seed or allow the first registered user to be promoted to Admin role.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "i don't acces admin panel"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A user with Admin role can load the AdminPanel without being blocked by the role guard.",
-        "The backend exposes a way to assign or verify admin role for a given principal.",
-        "If no admin exists, the backend allows an initial admin bootstrap (e.g., first caller or a hardcoded principal is granted admin role)."
+        "Navigating to /admin loads the AdminPanel component immediately without any authentication prompt.",
+        "The 'Access Denied' screen with the shield icon is never shown when visiting /admin.",
+        "No role check or Internet Identity login is required to view the admin panel.",
+        "All admin sections (Dashboard, Users, Technicians, Bookings, Services, Reports) remain fully functional after removing the gate.",
+        "The 'Back to home' fallback screen is removed or unreachable via /admin."
       ]
     }
   ],
   "constraints": [
-    "Do not modify files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui.",
-    "Preserve all existing routing logic for the Customer and Technician app modes."
+    "Do not modify any files under frontend/src/hooks/useInternetIdentity.ts or frontend/src/hooks/useActor.ts.",
+    "Do not change the backend RBAC logic — only the frontend gate in AdminPanel.tsx should be removed."
   ],
   "nonGoals": [
-    "Redesigning the admin panel UI or adding new admin features.",
-    "Changing the authentication provider from Internet Identity.",
-    "Modifying the customer or technician frontend flows."
+    "Adding any new authentication mechanism for the admin panel.",
+    "Changing the backend role definitions or access control.",
+    "Modifying any customer or technician frontend screens."
   ],
   "imageRequirements": {
     "required": [],
