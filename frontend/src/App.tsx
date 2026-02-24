@@ -46,16 +46,9 @@ type CustomerView =
   | 'notes'
   | 'confirm';
 
-function getInitialMode(): AppMode {
-  const path = window.location.pathname;
-  if (path.startsWith('/technician')) return 'technician';
-  if (path.startsWith('/admin')) return 'admin';
-  return 'customer';
-}
-
 // ── Customer App ─────────────────────────────────────────────────────────────
 
-function CustomerApp() {
+function CustomerApp({ onSwitchToAdmin }: { onSwitchToAdmin: () => void }) {
   const { identity, clear } = useInternetIdentity();
   const queryClient = useQueryClient();
   const isAuthenticated = !!identity;
@@ -121,7 +114,13 @@ function CustomerApp() {
       return <RewardsView userProfile={userProfile ?? null} />;
     }
     if (activeTab === 'account') {
-      return <AccountView userProfile={userProfile ?? null} onLogout={handleLogout} />;
+      return (
+        <AccountView
+          userProfile={userProfile ?? null}
+          onLogout={handleLogout}
+          onNavigateAdmin={onSwitchToAdmin}
+        />
+      );
     }
 
     // Home tab views
@@ -341,7 +340,7 @@ export default function App() {
   return (
     <>
       {appMode === null && <LandingPage onSelectMode={setAppMode} />}
-      {appMode === 'customer' && <CustomerApp />}
+      {appMode === 'customer' && <CustomerApp onSwitchToAdmin={() => setAppMode('admin')} />}
       {appMode === 'technician' && <TechnicianApp />}
       {appMode === 'admin' && <AdminPanel />}
       <Toaster richColors position="top-center" />

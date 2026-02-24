@@ -2,125 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-build-the-customer-facing-react-frontend-with-three-main-view-sets-1-auth-screens-phone-number-entry-otp-verification-input-auto-redirect-on-valid-session-2-home-screen-top-location-bar-showing-selected-address-search-bar-auto-scrolling-banner-slider-service-categories-grid-with-icons-featured-services-horizontal-scroll-section-bottom-navigation-tabs-home-bookings-rewards-account-3-service-screens-category-service-list-service-detail-page-with-image-price-duration-reviews-summary-and-add-to-cart-button",
-      "featureTitle": "Build the Customer-facing React frontend with three main view sets: (1) Auth screens — phone number entry, OTP verification input, auto-redirect on valid session; (2) Home screen — top location bar showing selected address, search bar, auto-scrolling banner slider, service categories grid with icons, featured services horizontal scroll section, bottom navigation tabs (Home, Bookings, Rewards, Account); (3) Service screens — category service list, service detail page with image, price, duration, reviews summary, and Add to Cart button.",
+      "featureId": "feature-fix-the-admin-panel-routing-so-that-navigating-to-the-admin-path-or-equivalent-url-correctly-loads-the-adminpanel-page-without-redirecting-away-or-showing-an-access-denied-state-for-legitimate-admin-users-ensure-app-tsx-correctly-detects-the-admin-mode-from-the-url-and-renders-the-adminpanel-component",
+      "featureTitle": "Fix the Admin panel routing so that navigating to the /admin path (or equivalent URL) correctly loads the AdminPanel page without redirecting away or showing an access-denied state for legitimate admin users. Ensure App.tsx correctly detects the 'admin' mode from the URL and renders the AdminPanel component.",
       "files": [
         "frontend/src/App.tsx",
-        "frontend/src/components/customer/AuthFlow.tsx",
-        "frontend/src/components/customer/BottomNavigation.tsx",
-        "frontend/src/components/customer/HomeScreen.tsx",
-        "frontend/src/components/customer/ProfileSetupModal.tsx",
-        "frontend/src/components/customer/ServiceDetailPage.tsx",
-        "frontend/src/components/customer/ServiceListByCategory.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "user-approval@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-13"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-build-the-customer-booking-flow-screens-1-cart-summary-view-with-selected-services-2-address-selection-screen-showing-saved-addresses-with-option-to-add-new-3-date-time-slot-picker-4-notes-entry-field-5-booking-confirmation-screen-displaying-unique-booking-id-service-summary-and-selected-payment-method-choice-cash-on-delivery-online-wallet",
-      "featureTitle": "Build the Customer booking flow screens: (1) Cart summary view with selected services; (2) Address selection screen showing saved addresses with option to add new; (3) Date & time slot picker; (4) Notes entry field; (5) Booking confirmation screen displaying unique booking ID, service summary, and selected payment method choice (Cash on Delivery, Online, Wallet).",
-      "files": [
-        "frontend/src/components/customer/AddAddressModal.tsx",
-        "frontend/src/components/customer/AddressSelection.tsx",
-        "frontend/src/components/customer/BookingConfirmation.tsx",
-        "frontend/src/components/customer/BookingNotesEntry.tsx",
-        "frontend/src/components/customer/CartSummary.tsx",
-        "frontend/src/components/customer/DateTimeSlotPicker.tsx",
-        "frontend/src/hooks/useBookingFlow.ts"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "user-approval@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-14"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-build-the-customer-bookings-list-and-booking-detail-screens-bookings-list-with-status-badges-pending-assigned-on-the-way-in-progress-completed-cancelled-filterable-by-status-booking-detail-showing-technician-info-live-status-timeline-invoice-summary-and-a-submit-review-form-1-5-stars-text-that-appears-only-for-completed-bookings",
-      "featureTitle": "Build the Customer bookings list and booking detail screens: bookings list with status badges (Pending, Assigned, On the Way, In Progress, Completed, Cancelled) filterable by status; booking detail showing technician info, live status timeline, invoice summary, and a submit review form (1–5 stars + text) that appears only for Completed bookings.",
-      "files": [
-        "frontend/src/components/customer/BookingsView.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "user-approval@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-15"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-build-the-customer-rewards-wallet-screen-shows-current-wallet-balance-transaction-history-list-referral-code-display-with-a-share-button-copies-code-to-clipboard-and-referral-stats-total-referred-users-total-rewards-earned",
-      "featureTitle": "Build the Customer Rewards/Wallet screen: shows current wallet balance, transaction history list, referral code display with a share button (copies code to clipboard), and referral stats (total referred users, total rewards earned).",
-      "files": [
-        "frontend/src/components/customer/RewardsView.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "user-approval@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-16"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-build-the-technician-facing-react-frontend-1-otp-login-screen-2-dashboard-showing-list-of-assigned-jobs-with-customer-name-service-time-slot-and-accept-reject-action-buttons-3-active-job-screen-with-step-by-step-workflow-buttons-mark-reached-mark-started-add-extra-items-form-to-add-item-name-price-generate-final-bill-preview-mark-completed-4-earnings-screen-with-tabs-for-daily-weekly-and-total-views-and-a-commission-deduction-breakdown",
-      "featureTitle": "Build the Technician-facing React frontend: (1) OTP login screen; (2) Dashboard showing list of assigned jobs with customer name, service, time slot, and Accept/Reject action buttons; (3) Active job screen with step-by-step workflow buttons: Mark Reached → Mark Started → Add Extra Items (form to add item name + price) → Generate Final Bill preview → Mark Completed; (4) Earnings screen with tabs for Daily, Weekly, and Total views and a commission deduction breakdown.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/pages/TechnicianApp.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "user-approval@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-17"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-build-the-admin-web-panel-react-frontend-with-a-sidebar-navigation-covering-dashboard-summary-cards-users-technicians-bookings-services-categories-offers-and-reports-sections-dashboard-shows-kpi-cards-total-bookings-today-active-bookings-total-revenue-today-and-technician-count",
-      "featureTitle": "Build the Admin web panel React frontend with a sidebar navigation covering: Dashboard (summary cards), Users, Technicians, Bookings, Services & Categories, Offers, and Reports sections. Dashboard shows KPI cards: total bookings today, active bookings, total revenue today, and technician count.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/components/admin/AdminDashboard.tsx",
-        "frontend/src/components/admin/AdminSidebar.tsx",
         "frontend/src/pages/AdminPanel.tsx"
       ],
       "components": [
@@ -133,15 +18,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-18"
+        "REQ-26"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-build-admin-user-management-screen-paginated-table-of-all-users-with-columns-for-name-phone-role-status-and-join-date-each-row-has-block-unblock-toggle-action-clicking-a-row-opens-a-user-detail-panel",
-      "featureTitle": "Build Admin User Management screen: paginated table of all users with columns for name, phone, role, status, and join date. Each row has Block/Unblock toggle action. Clicking a row opens a user detail panel.",
+      "featureId": "feature-add-a-clearly-visible-direct-link-or-button-on-the-main-landing-page-or-in-the-customer-app-header-to-navigate-to-the-admin-panel-at-the-admin-route-so-users-can-discover-and-access-it-without-manually-editing-the-url",
+      "featureTitle": "Add a clearly visible direct link or button on the main landing page (or in the customer app header) to navigate to the Admin panel at the /admin route, so users can discover and access it without manually editing the URL.",
       "files": [
-        "frontend/src/components/admin/UsersManagement.tsx"
+        "frontend/src/components/customer/AccountView.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -153,15 +38,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-19"
+        "REQ-27"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-build-admin-technician-management-screen-table-of-all-technicians-with-name-phone-service-area-status-active-suspended-pending-and-documents-approval-state-actions-add-technician-modal-form-approve-documents-button-assign-service-area-input-suspend-reactivate-toggle",
-      "featureTitle": "Build Admin Technician Management screen: table of all technicians with name, phone, service area, status (Active/Suspended/Pending), and documents approval state. Actions: Add Technician modal form, Approve Documents button, Assign Service Area input, Suspend/Reactivate toggle.",
+      "featureId": "feature-ensure-the-backend-s-role-based-access-control-correctly-identifies-admin-callers-and-that-the-frontend-adminpanel-guard-which-checks-authentication-and-admin-role-does-not-incorrectly-reject-valid-admin-principals-if-no-admin-user-exists-in-the-backend-seed-or-allow-the-first-registered-user-to-be-promoted-to-admin-role",
+      "featureTitle": "Ensure the backend's role-based access control correctly identifies admin callers and that the frontend AdminPanel guard (which checks authentication and admin role) does not incorrectly reject valid admin principals. If no admin user exists in the backend, seed or allow the first registered user to be promoted to Admin role.",
       "files": [
-        "frontend/src/components/admin/TechniciansManagement.tsx"
+        "frontend/src/pages/AdminPanel.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -173,112 +58,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-20"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-build-admin-booking-management-screen-full-bookings-table-with-filter-tabs-by-status-and-date-range-picker-each-row-shows-booking-id-customer-technician-service-status-and-amount-actions-manually-assign-technician-dropdown-of-available-technicians-change-booking-status-via-dropdown",
-      "featureTitle": "Build Admin Booking Management screen: full bookings table with filter tabs by status and date range picker. Each row shows booking ID, customer, technician, service, status, and amount. Actions: manually assign technician (dropdown of available technicians), change booking status via dropdown.",
-      "files": [
-        "frontend/src/components/admin/BookingsManagement.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "user-approval@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-21"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-build-admin-services-categories-management-screen-category-list-with-add-edit-delete-service-list-per-category-with-add-edit-modal-name-description-price-duration-image-url-active-toggle-and-commission-rate-setting-per-service-or-globally-per-technician",
-      "featureTitle": "Build Admin Services & Categories Management screen: category list with add/edit/delete; service list per category with add/edit modal (name, description, price, duration, image URL, active toggle) and commission rate setting per service or globally per technician.",
-      "files": [
-        "frontend/src/components/admin/ServicesManagement.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "user-approval@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-22"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-build-admin-reports-screen-with-two-sub-tabs-revenue-bar-chart-of-daily-revenue-for-last-30-days-monthly-revenue-summary-table-and-performance-technician-performance-table-showing-completed-jobs-count-average-rating-total-earnings-commission-paid-use-a-charting-approach-compatible-with-react-for-the-bar-chart",
-      "featureTitle": "Build Admin Reports screen with two sub-tabs: Revenue (bar chart of daily revenue for last 30 days, monthly revenue summary table) and Performance (technician performance table showing completed jobs count, average rating, total earnings, commission paid). Use a charting approach compatible with React for the bar chart.",
-      "files": [
-        "frontend/src/components/admin/ReportsScreen.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "user-approval@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-23"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-apply-a-consistent-visual-design-system-across-all-three-frontends-customer-technician-admin-white-off-white-backgrounds-blue-primary-color-2563eb-with-purple-accent-7c3aed-rounded-corners-border-radius-12-16px-on-cards-soft-box-shadows-minimal-clean-typography-and-card-based-layout-patterns-customer-and-technician-views-should-resemble-a-mobile-app-layout-max-width-430px-centered-admin-panel-uses-full-width-desktop-layout-with-a-fixed-sidebar",
-      "featureTitle": "Apply a consistent visual design system across all three frontends (Customer, Technician, Admin): white/off-white backgrounds, blue primary color (#2563EB) with purple accent (#7C3AED), rounded corners (border-radius 12–16px on cards), soft box shadows, minimal clean typography, and card-based layout patterns. Customer and Technician views should resemble a mobile app layout (max-width 430px centered). Admin panel uses full-width desktop layout with a fixed sidebar.",
-      "files": [
-        "frontend/src/components/layouts/AdminLayout.tsx",
-        "frontend/src/components/layouts/MobileContainer.tsx",
-        "frontend/src/index.css",
-        "frontend/tailwind.config.js"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "user-approval@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-24"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-implement-in-app-notification-state-management-the-backend-should-expose-a-notifications-endpoint-that-stores-notification-records-userid-type-message-isread-createdat-the-frontend-should-poll-for-unread-notifications-and-display-a-notification-bell-with-unread-count-badge-in-the-customer-and-technician-headers-clicking-it-shows-a-dropdown-list-of-recent-notifications-types-include-bookingconfirmation-technicianassigned-servicecompleted-paymentsuccess-offer",
-      "featureTitle": "Implement in-app notification state management: the backend should expose a notifications endpoint that stores notification records (userId, type, message, isRead, createdAt). The frontend should poll for unread notifications and display a notification bell with unread count badge in the Customer and Technician headers. Clicking it shows a dropdown list of recent notifications. Types include: BookingConfirmation, TechnicianAssigned, ServiceCompleted, PaymentSuccess, Offer.",
-      "files": [
-        "frontend/src/components/customer/HomeScreen.tsx",
-        "frontend/src/components/shared/NotificationBell.tsx",
-        "frontend/src/hooks/useNotifications.ts"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "user-approval@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-25"
+        "REQ-28"
       ],
       "confidence": "high"
     }

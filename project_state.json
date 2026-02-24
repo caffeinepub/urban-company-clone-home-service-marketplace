@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
+  "projectStateVersion": 5,
   "summary": "Full multi-panel home service marketplace app similar to Urban Company. Includes Customer Mobile App, Technician Mobile App, and Admin Web Panel. Backend uses Firebase (Auth, Firestore, Cloud Messaging). Clean modern UI with white background and blue/purple primary color.",
   "architectural_notes": [
     "Backend: Firebase Auth (phone/OTP), Firestore (realtime DB), Firebase Cloud Messaging (push notifications)",
@@ -10,9 +10,10 @@
     "Firestore collections: users, technicians, services, categories, bookings, payments, wallets, reviews, referrals",
     "Design: white background, blue/purple primary, rounded corners, soft shadows, minimal UI"
   ],
-  "known_issues": [],
-  "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Home service marketplace hero banner with clean illustration of a technician at work in a modern home, blue gradient background (banner-hero.dim_1200x400.png)\n- Service category icon set — 8 icons: Plumbing (wrench/pipe), Electrical (lightning bolt), Cleaning (broom/sparkle), AC Repair (snowflake/unit), Painting (brush/roller), Carpentry (hammer/wood), Appliance Repair (washing machine), Pest Control (bug/shield) — flat style, blue primary color on white circle background (cat-plumbing.dim_80x80.png, cat-electrical.dim_80x80.png, cat-cleaning.dim_80x80.png, cat-ac.dim_80x80.png, cat-painting.dim_80x80.png, cat-carpentry.dim_80x80.png, cat-appliance.dim_80x80.png, cat-pest.dim_80x80.png)\n- App logo mark — stylized house outline with a checkmark or wrench tool merged inside, blue and purple gradient, minimal flat design (app-logo.dim_256x256.png)\n- Promotional banner slide 1 — '50% off on first booking' offer banner, vibrant blue background, bold white text, abstract curved shapes (promo-banner-1.dim_1200x400.png)\n- Promotional banner slide 2 — 'Book a professional cleaner today' banner, light purple background, friendly illustration of a cleaning professional (promo-banner-2.dim_1200x400.png)",
+  "known_issues": [
+    "Admin panel is inaccessible to users — access/routing issue reported"
+  ],
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-build-the-customer-facing-react-frontend-with-three-main-view-sets-1-auth-screens-phone-number-entry-otp-verification-input-auto-redirect-on-valid-session-2-home-screen-top-location-bar-showing-selected-address-search-bar-auto-scrolling-banner-slider-service-categories-grid-with-icons-featured-services-horizontal-scroll-section-bottom-navigation-tabs-home-bookings-rewards-account-3-service-screens-category-service-list-service-detail-page-with-image-price-duration-reviews-summary-and-add-to-cart-button",
@@ -115,6 +116,30 @@
       "title": "Implement in-app notification state management: the backend should expose a notifications endpoint that stores notification records (userId, type, message, isRead, createdAt). The frontend should poll for unread notifications and display a notification bell with unread count badge in the Customer and Technician headers. Clicking it shows a dropdown list of recent notifications. Types include: BookingConfirmation, TechnicianAssigned, ServiceCompleted, PaymentSuccess, Offer.",
       "reqIds": [
         "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-admin-panel-routing-so-that-navigating-to-the-admin-path-or-equivalent-url-correctly-loads-the-adminpanel-page-without-redirecting-away-or-showing-an-access-denied-state-for-legitimate-admin-users-ensure-app-tsx-correctly-detects-the-admin-mode-from-the-url-and-renders-the-adminpanel-component",
+      "title": "Fix the Admin panel routing so that navigating to the /admin path (or equivalent URL) correctly loads the AdminPanel page without redirecting away or showing an access-denied state for legitimate admin users. Ensure App.tsx correctly detects the 'admin' mode from the URL and renders the AdminPanel component.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-clearly-visible-direct-link-or-button-on-the-main-landing-page-or-in-the-customer-app-header-to-navigate-to-the-admin-panel-at-the-admin-route-so-users-can-discover-and-access-it-without-manually-editing-the-url",
+      "title": "Add a clearly visible direct link or button on the main landing page (or in the customer app header) to navigate to the Admin panel at the /admin route, so users can discover and access it without manually editing the URL.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-backend-s-role-based-access-control-correctly-identifies-admin-callers-and-that-the-frontend-adminpanel-guard-which-checks-authentication-and-admin-role-does-not-incorrectly-reject-valid-admin-principals-if-no-admin-user-exists-in-the-backend-seed-or-allow-the-first-registered-user-to-be-promoted-to-admin-role",
+      "title": "Ensure the backend's role-based access control correctly identifies admin callers and that the frontend AdminPanel guard (which checks authentication and admin role) does not incorrectly reject valid admin principals. If no admin user exists in the backend, seed or allow the first registered user to be promoted to Admin role.",
+      "reqIds": [
+        "REQ-28"
       ],
       "version": 1
     }

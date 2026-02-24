@@ -1,17 +1,21 @@
 import React from 'react';
-import { User, MapPin, Bell, Shield, HelpCircle, LogOut, ChevronRight, Phone, Mail } from 'lucide-react';
+import { User, MapPin, Bell, Shield, HelpCircle, LogOut, ChevronRight, Phone, Mail, Settings } from 'lucide-react';
 import type { UserProfileResponse } from '../../backend';
+import { UserRole } from '../../backend';
 import { Button } from '@/components/ui/button';
 
 interface AccountViewProps {
   userProfile: UserProfileResponse | null;
   onLogout: () => void;
+  onNavigateAdmin?: () => void;
 }
 
-export default function AccountView({ userProfile, onLogout }: AccountViewProps) {
+export default function AccountView({ userProfile, onLogout, onNavigateAdmin }: AccountViewProps) {
   const fullName = userProfile
     ? `${userProfile.firstName} ${userProfile.lastName}`.trim()
     : 'Guest User';
+
+  const isAdmin = userProfile?.role === UserRole.admin;
 
   return (
     <div className="flex-1 overflow-y-auto pb-20">
@@ -35,11 +39,34 @@ export default function AccountView({ userProfile, onLogout }: AccountViewProps)
                 {userProfile.email}
               </p>
             )}
+            {isAdmin && (
+              <span className="inline-flex items-center gap-1 mt-1 bg-white/20 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full">
+                <Shield className="w-2.5 h-2.5" />
+                Admin
+              </span>
+            )}
           </div>
         </div>
       </div>
 
       <div className="px-4 pt-4 space-y-3">
+        {/* Admin Panel shortcut — only for admins */}
+        {isAdmin && (
+          <button
+            onClick={onNavigateAdmin ?? (() => { window.location.pathname = '/admin'; })}
+            className="w-full bg-primary/5 border-2 border-primary/20 rounded-2xl p-4 flex items-center gap-3 hover:bg-primary/10 hover:border-primary/40 transition-all"
+          >
+            <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center flex-shrink-0">
+              <Settings className="w-5 h-5 text-white" />
+            </div>
+            <div className="flex-1 text-left">
+              <p className="text-sm font-semibold text-primary">Admin Panel</p>
+              <p className="text-xs text-muted-foreground">Manage platform settings</p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-primary" />
+          </button>
+        )}
+
         {/* Menu Items */}
         {[
           { icon: MapPin, label: 'Saved Addresses', desc: `${userProfile?.savedAddresses?.length ?? 0} addresses` },

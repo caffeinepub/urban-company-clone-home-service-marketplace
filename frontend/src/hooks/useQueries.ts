@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
+import { useInternetIdentity } from './useInternetIdentity';
 import type { UserProfile, Address, UserProfileResponse, ServiceCategory, Service, ApprovalStatus } from '../backend';
 import { UserRole } from '../backend';
 import type { Principal } from '@dfinity/principal';
@@ -8,6 +9,8 @@ import type { Principal } from '@dfinity/principal';
 
 export function useGetCallerUserProfile() {
   const { actor, isFetching: actorFetching } = useActor();
+  const { identity } = useInternetIdentity();
+  const isAuthenticated = !!identity;
 
   const query = useQuery<UserProfileResponse | null>({
     queryKey: ['currentUserProfile'],
@@ -15,7 +18,7 @@ export function useGetCallerUserProfile() {
       if (!actor) throw new Error('Actor not available');
       return actor.getCallerUserProfile();
     },
-    enabled: !!actor && !actorFetching,
+    enabled: !!actor && !actorFetching && isAuthenticated,
     retry: false,
   });
 
@@ -43,6 +46,8 @@ export function useSaveCallerUserProfile() {
 
 export function useGetCallerUserRole() {
   const { actor, isFetching: actorFetching } = useActor();
+  const { identity } = useInternetIdentity();
+  const isAuthenticated = !!identity;
 
   return useQuery<UserRole>({
     queryKey: ['callerUserRole'],
@@ -50,12 +55,14 @@ export function useGetCallerUserRole() {
       if (!actor) throw new Error('Actor not available');
       return actor.getCallerUserRole();
     },
-    enabled: !!actor && !actorFetching,
+    enabled: !!actor && !actorFetching && isAuthenticated,
   });
 }
 
 export function useIsCallerAdmin() {
   const { actor, isFetching: actorFetching } = useActor();
+  const { identity } = useInternetIdentity();
+  const isAuthenticated = !!identity;
 
   return useQuery<boolean>({
     queryKey: ['isCallerAdmin'],
@@ -63,7 +70,8 @@ export function useIsCallerAdmin() {
       if (!actor) throw new Error('Actor not available');
       return actor.isCallerAdmin();
     },
-    enabled: !!actor && !actorFetching,
+    // Only run when authenticated — anonymous actor always returns false
+    enabled: !!actor && !actorFetching && isAuthenticated,
   });
 }
 
@@ -71,6 +79,8 @@ export function useIsCallerAdmin() {
 
 export function useListAddresses() {
   const { actor, isFetching: actorFetching } = useActor();
+  const { identity } = useInternetIdentity();
+  const isAuthenticated = !!identity;
 
   return useQuery<Address[]>({
     queryKey: ['addresses'],
@@ -78,7 +88,7 @@ export function useListAddresses() {
       if (!actor) throw new Error('Actor not available');
       return actor.listAddresses();
     },
-    enabled: !!actor && !actorFetching,
+    enabled: !!actor && !actorFetching && isAuthenticated,
   });
 }
 
@@ -312,6 +322,8 @@ export function useDeleteService() {
 
 export function useListApprovals() {
   const { actor, isFetching: actorFetching } = useActor();
+  const { identity } = useInternetIdentity();
+  const isAuthenticated = !!identity;
 
   return useQuery({
     queryKey: ['approvals'],
@@ -319,7 +331,7 @@ export function useListApprovals() {
       if (!actor) return [];
       return actor.listApprovals();
     },
-    enabled: !!actor && !actorFetching,
+    enabled: !!actor && !actorFetching && isAuthenticated,
   });
 }
 
@@ -350,6 +362,7 @@ export function useAssignCallerUserRole() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['callerUserRole'] });
       queryClient.invalidateQueries({ queryKey: ['approvals'] });
+      queryClient.invalidateQueries({ queryKey: ['isCallerAdmin'] });
     },
   });
 }

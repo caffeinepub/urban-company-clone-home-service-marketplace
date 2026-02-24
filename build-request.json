@@ -1,614 +1,74 @@
 {
   "kind": "build_request",
-  "title": "Home Service Marketplace (Urban Company-style) — Full Multi-Panel App",
-  "projectName": "ServeEase Marketplace",
-  "priority": "normal",
+  "title": "Fix Admin Panel Access and Routing Issue",
+  "priority": "high",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Define the Motoko backend data schema with stable storage for all core collections: users (id, phone, name, email, role, referralCode, walletBalance, savedAddresses, isBlocked, createdAt), technicians (id, phone, name, serviceArea, assignedCategories, commissionRate, status, documentsApproved, earnings, createdAt), services (id, categoryId, name, description, price, duration, imageUrl, isActive), categories (id, name, iconUrl, order), bookings (id, customerId, technicianId, serviceId, addressId, date, timeSlot, status, notes, bookingCode, paymentMethod, totalAmount, extraCharges, invoiceUrl, createdAt), payments (id, bookingId, customerId, method, amount, status, createdAt), wallets (userId, balance, transactions[]), reviews (id, bookingId, customerId, technicianId, rating, text, createdAt), referrals (referrerId, referredUserId, rewardGranted, createdAt).",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "DATABASE STRUCTURE",
-          "Collections: users, technicians, services, categories, bookings, payments, wallets, reviews, referrals"
-        ]
-      },
-      "acceptanceCriteria": [
-        "All nine collections have stable Motoko type definitions",
-        "Each record type includes all specified fields with correct types",
-        "Stable variables back each collection for upgrade persistence"
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Implement role-based access control in the Motoko backend with three roles: Customer, Technician, and Admin. All update/query endpoints must validate the caller's role before executing. Admins have full access; Technicians can only access their own jobs and earnings; Customers can only access their own bookings, wallet, and profile.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Create role-based access (Customer / Technician / Admin)"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Role enum exists with Customer, Technician, Admin variants",
-        "Each backend function checks role before proceeding",
-        "Unauthorized calls return an explicit error variant",
-        "Admin-only functions (e.g., blockUser, approveDocument) reject non-admin callers"
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Implement user authentication endpoints in the Motoko backend: register user with phone number and role, verify OTP (simulated via a stored code), maintain session via Internet Identity principal, and logout (clear session token). Auto-login must be supported by re-checking the stored principal on subsequent calls.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Phone number login",
-          "OTP verification",
-          "Auto login session",
-          "Logout",
-          "OTP login"
-        ]
-      },
-      "acceptanceCriteria": [
-        "registerUser endpoint stores user record with phone and role",
-        "verifyOTP endpoint validates code and returns session confirmation",
-        "Authenticated principal maps to a user record on every call",
-        "logout endpoint clears any stored session data for that principal"
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Implement address management endpoints: saveAddress (adds to user's savedAddresses array), setDefaultAddress (marks one address as default), listAddresses (returns all saved addresses for a user), and deleteAddress.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Save multiple addresses",
-          "Default address selection"
-        ]
-      },
-      "acceptanceCriteria": [
-        "saveAddress appends a new address with a unique addressId",
-        "setDefaultAddress updates the default flag correctly",
-        "listAddresses returns the full saved-address array for the caller",
-        "deleteAddress removes the specified address"
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Implement service and category management endpoints: createCategory, listCategories, createService, updateService (price, duration, description, active flag), listServicesByCategory, getServiceDetails. Admins can create/update; all roles can read.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Service list by category",
-          "Service details page",
-          "Add service",
-          "Edit service price",
-          "Price Management"
-        ]
-      },
-      "acceptanceCriteria": [
-        "listCategories returns all active categories",
-        "listServicesByCategory filters by categoryId",
-        "getServiceDetails returns full service record including price and duration",
-        "Only Admin role can call createCategory, createService, updateService"
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Implement the booking lifecycle in the backend: createBooking (generates unique booking ID with prefix BK + timestamp + random suffix, sets status to Pending), assignTechnician (Admin or system assigns technicianId, updates status to Assigned), updateBookingStatus (accepts status transitions: Pending → Assigned → OnTheWay → InProgress → Completed | Cancelled), getBooking, listBookingsByCustomer, listBookingsByTechnician, listAllBookings (Admin).",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Generate unique booking ID",
-          "Booking Status: Pending, Assigned, On the way, In progress, Completed, Cancelled",
-          "Connect all status changes with real-time updates"
-        ]
-      },
-      "acceptanceCriteria": [
-        "createBooking generates a unique booking code each time",
-        "Status transitions are validated (no skipping states arbitrarily)",
-        "assignTechnician is only callable by Admin role",
-        "listAllBookings supports filtering by status parameter",
-        "Technician can call updateBookingStatus only for their own assigned bookings"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Implement payment and wallet endpoints: recordPayment (stores payment record linked to bookingId, supports methods: CashOnDelivery, OnlinePayment, WalletDeduction), deductFromWallet, addToWallet (for referral rewards), getWalletBalance, generateInvoice (returns a structured invoice record for a completed booking including service items, extra charges, and total).",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Cash on delivery",
-          "Online payment integration",
-          "Wallet deduction",
-          "Auto invoice generation"
-        ]
-      },
-      "acceptanceCriteria": [
-        "recordPayment creates a payment record with method, amount, and status",
-        "deductFromWallet fails with error if balance is insufficient",
-        "generateInvoice returns all line items including extra charges added by technician",
-        "Wallet balance updates atomically with payment recording"
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "text": "Implement the technician service workflow endpoints: markReached (sets status to OnTheWay), markStarted (sets status to InProgress), addExtraItems (appends extra items like pipe, gas, spare parts with price to the booking's extraCharges list), generateFinalBill (computes base price + extra charges total), markCompleted (sets status to Completed, triggers commission deduction from technician earnings).",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Mark reached",
-          "Mark work started",
-          "Add extra items (pipe, gas, spare parts)",
-          "Add extra charges",
-          "Generate final bill",
-          "Mark completed"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Only the assigned technician can call these workflow endpoints for a booking",
-        "addExtraItems appends items and recalculates totalAmount",
-        "generateFinalBill returns base + extras sum",
-        "markCompleted updates technician earnings minus commission percentage"
-      ]
-    },
-    {
-      "id": "REQ-9",
-      "text": "Implement earnings endpoints for technicians: getDailyEarnings(date), getWeeklyEarnings(weekStartDate), getTotalEarnings, getCommissionDeductions — all filtered to the calling technician's records.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Daily earnings",
-          "Weekly earnings",
-          "Total earnings",
-          "Commission deduction view"
-        ]
-      },
-      "acceptanceCriteria": [
-        "getDailyEarnings filters completed bookings by calendar date",
-        "getWeeklyEarnings aggregates across 7 days from startDate",
-        "getCommissionDeductions returns list of commission entries deducted per booking",
-        "All endpoints enforce Technician role check"
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "text": "Implement the review and rating endpoints: submitReview (customerId, bookingId, technicianId, rating 1–5, text — only callable after booking is Completed), getReviewsByTechnician, getReviewsByService.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "1–5 star rating",
-          "Review text submission"
-        ]
-      },
-      "acceptanceCriteria": [
-        "submitReview rejects submissions for non-Completed bookings",
-        "Duplicate review for same bookingId is rejected",
-        "getReviewsByTechnician returns all reviews with average rating computation",
-        "Rating is validated to be between 1 and 5"
-      ]
-    },
-    {
-      "id": "REQ-11",
-      "text": "Implement the referral system: generateReferralCode (creates unique code for a user at registration), applyReferralCode (links referrer to referred user), grantReferralReward (adds wallet credit to referrer when referred user completes their first service), getReferralStats (referrer's total referrals and total rewards earned).",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Unique referral code",
-          "Wallet reward after completed service",
-          "Referral System"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Referral codes are unique and stored on the user record",
-        "applyReferralCode stores the referral link in referrals collection",
-        "grantReferralReward only fires once per referred user's first completed booking",
-        "getReferralStats returns count and total reward amount"
-      ]
-    },
-    {
-      "id": "REQ-12",
-      "text": "Implement Admin management endpoints: blockUser, unblockUser, addTechnician, assignServiceArea, approveDocument, suspendTechnician, reactivateTechnician, getAdminReports (daily revenue, monthly revenue, active bookings count, technician performance summary), setTechnicianCommission, createOffer, updateOffer, listOffers.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "View users",
-          "Block users",
-          "Add technician",
-          "Assign service area",
-          "Approve documents",
-          "Suspend technician",
-          "Daily revenue",
-          "Monthly revenue",
-          "Technician performance",
-          "Set technician commission",
-          "Manage offers"
-        ]
-      },
-      "acceptanceCriteria": [
-        "All admin endpoints reject calls from non-Admin principals",
-        "blockUser sets isBlocked flag preventing that user from creating bookings",
-        "getAdminReports aggregates revenue from payments collection by date range",
-        "setTechnicianCommission updates the technician's commissionRate field",
-        "createOffer and updateOffer manage the offers sub-collection in services"
-      ]
-    },
-    {
-      "id": "REQ-13",
-      "text": "Build the Customer-facing React frontend with three main view sets: (1) Auth screens — phone number entry, OTP verification input, auto-redirect on valid session; (2) Home screen — top location bar showing selected address, search bar, auto-scrolling banner slider, service categories grid with icons, featured services horizontal scroll section, bottom navigation tabs (Home, Bookings, Rewards, Account); (3) Service screens — category service list, service detail page with image, price, duration, reviews summary, and Add to Cart button.",
+      "id": "REQ-26",
+      "text": "Fix the Admin panel routing so that navigating to the /admin path (or equivalent URL) correctly loads the AdminPanel page without redirecting away or showing an access-denied state for legitimate admin users. Ensure App.tsx correctly detects the 'admin' mode from the URL and renders the AdminPanel component.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-1"
         ],
         "quotes": [
-          "Home Screen",
-          "Location bar at top",
-          "Search bar",
-          "Banner slider",
-          "Service categories grid",
-          "Featured services section",
-          "Bottom navigation (Home, Bookings, Rewards, Account)",
-          "Service Module",
-          "Service list by category",
-          "Service details page"
+          "i don't acces admin panel"
         ]
       },
       "acceptanceCriteria": [
-        "Auth flow shows phone input → OTP screen → home on success",
-        "Home screen renders location bar, search, banner slider, categories grid, and featured section",
-        "Bottom navigation switches between Home, Bookings, Rewards, Account tabs",
-        "Service list filters by selected category",
-        "Service detail page shows price, duration, reviews count, and Add to Cart CTA"
+        "Navigating to the /admin URL renders the Admin panel sidebar and dashboard without being redirected to the customer or technician view.",
+        "The admin role check in AdminPanel.tsx does not incorrectly block access when a user is authenticated via Internet Identity.",
+        "If the user is not yet authenticated, the admin panel shows a login prompt or redirects to Internet Identity login rather than a blank or broken screen.",
+        "After successful Internet Identity login on the admin URL, the admin dashboard is displayed with KPI cards and sidebar navigation."
       ]
     },
     {
-      "id": "REQ-14",
-      "text": "Build the Customer booking flow screens: (1) Cart summary view with selected services; (2) Address selection screen showing saved addresses with option to add new; (3) Date & time slot picker; (4) Notes entry field; (5) Booking confirmation screen displaying unique booking ID, service summary, and selected payment method choice (Cash on Delivery, Online, Wallet).",
+      "id": "REQ-27",
+      "text": "Add a clearly visible direct link or button on the main landing page (or in the customer app header) to navigate to the Admin panel at the /admin route, so users can discover and access it without manually editing the URL.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-1"
         ],
         "quotes": [
-          "Select address",
-          "Select date & time slot",
-          "Add notes",
-          "Confirm booking",
-          "Generate unique booking ID",
-          "Cash on delivery",
-          "Online payment integration",
-          "Wallet deduction"
+          "i don't acces admin panel"
         ]
       },
       "acceptanceCriteria": [
-        "Cart screen lists selected services with totals",
-        "Address screen shows saved addresses and default-marked option",
-        "Date picker prevents past dates; time slot grid shows available slots",
-        "Confirmation screen displays the generated booking ID prominently",
-        "Payment method selector shows all three options"
+        "A visible 'Admin Panel' link or button is present that navigates to the admin route.",
+        "The link is only shown to users with the Admin role, or is placed in a non-obtrusive location if role cannot be pre-checked."
       ]
     },
     {
-      "id": "REQ-15",
-      "text": "Build the Customer bookings list and booking detail screens: bookings list with status badges (Pending, Assigned, On the Way, In Progress, Completed, Cancelled) filterable by status; booking detail showing technician info, live status timeline, invoice summary, and a submit review form (1–5 stars + text) that appears only for Completed bookings.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Booking Status: Pending, Assigned, On the way, In progress, Completed, Cancelled",
-          "1–5 star rating",
-          "Review text submission"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Bookings list shows status chip with appropriate color for each status",
-        "Status filter tabs narrow the list",
-        "Booking detail shows a vertical status timeline",
-        "Review form is visible only when booking status is Completed and no review exists",
-        "Star rating widget accepts 1–5 selection"
-      ]
-    },
-    {
-      "id": "REQ-16",
-      "text": "Build the Customer Rewards/Wallet screen: shows current wallet balance, transaction history list, referral code display with a share button (copies code to clipboard), and referral stats (total referred users, total rewards earned).",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Referral System",
-          "Unique referral code",
-          "Wallet reward after completed service",
-          "Rewards"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Wallet balance is displayed prominently",
-        "Transaction history shows each credit/debit with date and source",
-        "Referral code is shown in a styled card with a copy-to-clipboard button",
-        "Referral stats show count and total reward amount"
-      ]
-    },
-    {
-      "id": "REQ-17",
-      "text": "Build the Technician-facing React frontend: (1) OTP login screen; (2) Dashboard showing list of assigned jobs with customer name, service, time slot, and Accept/Reject action buttons; (3) Active job screen with step-by-step workflow buttons: Mark Reached → Mark Started → Add Extra Items (form to add item name + price) → Generate Final Bill preview → Mark Completed; (4) Earnings screen with tabs for Daily, Weekly, and Total views and a commission deduction breakdown.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "TECHNICIAN APP FEATURES",
-          "Assigned jobs list",
-          "Accept / Reject job",
-          "Mark reached",
-          "Mark work started",
-          "Add extra items",
-          "Generate final bill",
-          "Mark completed",
-          "Daily earnings",
-          "Weekly earnings",
-          "Total earnings",
-          "Commission deduction view"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Dashboard lists all assigned jobs with Accept/Reject controls",
-        "Accepting a job navigates to the active job workflow screen",
-        "Workflow buttons appear sequentially based on current booking status",
-        "Extra items form allows adding multiple items with name and price",
-        "Final bill shows base price + extra items total",
-        "Earnings tabs switch between daily, weekly, and total aggregates"
-      ]
-    },
-    {
-      "id": "REQ-18",
-      "text": "Build the Admin web panel React frontend with a sidebar navigation covering: Dashboard (summary cards), Users, Technicians, Bookings, Services & Categories, Offers, and Reports sections. Dashboard shows KPI cards: total bookings today, active bookings, total revenue today, and technician count.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "ADMIN PANEL FEATURES",
-          "Reports: Daily revenue, Monthly revenue, Active bookings, Technician performance"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Sidebar navigation links to all major admin sections",
-        "Dashboard renders four KPI summary cards",
-        "All admin sections are reachable from the sidebar without page reload"
-      ]
-    },
-    {
-      "id": "REQ-19",
-      "text": "Build Admin User Management screen: paginated table of all users with columns for name, phone, role, status, and join date. Each row has Block/Unblock toggle action. Clicking a row opens a user detail panel.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "View users",
-          "Block users"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Users table is paginated with at least 20 rows per page",
-        "Block/Unblock button reflects current isBlocked state",
-        "Blocking a user shows confirmation dialog before proceeding",
-        "User detail panel shows bookings count and wallet balance"
-      ]
-    },
-    {
-      "id": "REQ-20",
-      "text": "Build Admin Technician Management screen: table of all technicians with name, phone, service area, status (Active/Suspended/Pending), and documents approval state. Actions: Add Technician modal form, Approve Documents button, Assign Service Area input, Suspend/Reactivate toggle.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Add technician",
-          "Assign service area",
-          "Approve documents",
-          "Suspend technician"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Add Technician modal collects name, phone, service area, commission rate",
-        "Approve Documents button updates documentsApproved to true",
-        "Suspend/Reactivate toggle changes technician status with confirmation",
-        "Service area is editable inline or via modal"
-      ]
-    },
-    {
-      "id": "REQ-21",
-      "text": "Build Admin Booking Management screen: full bookings table with filter tabs by status and date range picker. Each row shows booking ID, customer, technician, service, status, and amount. Actions: manually assign technician (dropdown of available technicians), change booking status via dropdown.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "View all bookings",
-          "Filter by status",
-          "Assign technician manually",
-          "Change booking status"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Status filter tabs update the displayed booking list",
-        "Date range picker filters bookings by createdAt date",
-        "Assign Technician dropdown shows only active technicians",
-        "Status change dropdown validates allowed transitions"
-      ]
-    },
-    {
-      "id": "REQ-22",
-      "text": "Build Admin Services & Categories Management screen: category list with add/edit/delete; service list per category with add/edit modal (name, description, price, duration, image URL, active toggle) and commission rate setting per service or globally per technician.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Add service",
-          "Edit service price",
-          "Set technician commission",
-          "Price Management"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Category CRUD operations work without page reload",
-        "Service add/edit modal validates price (positive number) and duration (positive integer)",
-        "Commission rate field accepts percentage 0–100",
-        "Active toggle immediately reflects on service availability"
-      ]
-    },
-    {
-      "id": "REQ-23",
-      "text": "Build Admin Reports screen with two sub-tabs: Revenue (bar chart of daily revenue for last 30 days, monthly revenue summary table) and Performance (technician performance table showing completed jobs count, average rating, total earnings, commission paid). Use a charting approach compatible with React for the bar chart.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Daily revenue",
-          "Monthly revenue",
-          "Active bookings",
-          "Technician performance"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Revenue bar chart renders 30 data points",
-        "Monthly revenue table groups revenue by calendar month",
-        "Technician performance table is sortable by completed jobs and earnings",
-        "Reports data is fetched from the backend via React Query"
-      ]
-    },
-    {
-      "id": "REQ-24",
-      "text": "Apply a consistent visual design system across all three frontends (Customer, Technician, Admin): white/off-white backgrounds, blue primary color (#2563EB) with purple accent (#7C3AED), rounded corners (border-radius 12–16px on cards), soft box shadows, minimal clean typography, and card-based layout patterns. Customer and Technician views should resemble a mobile app layout (max-width 430px centered). Admin panel uses full-width desktop layout with a fixed sidebar.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Clean and modern",
-          "White background",
-          "Blue or purple primary color",
-          "Rounded corners",
-          "Soft shadows",
-          "Minimal UI"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Primary color #2563EB and accent #7C3AED are used consistently across buttons, badges, and highlights",
-        "All cards have visible border-radius and soft shadow",
-        "Customer and Technician views are contained in a max-width 430px centered container",
-        "Admin panel has a fixed left sidebar and scrollable main content area",
-        "Typography is clean with appropriate heading hierarchy"
-      ]
-    },
-    {
-      "id": "REQ-25",
-      "text": "Implement in-app notification state management: the backend should expose a notifications endpoint that stores notification records (userId, type, message, isRead, createdAt). The frontend should poll for unread notifications and display a notification bell with unread count badge in the Customer and Technician headers. Clicking it shows a dropdown list of recent notifications. Types include: BookingConfirmation, TechnicianAssigned, ServiceCompleted, PaymentSuccess, Offer.",
+      "id": "REQ-28",
+      "text": "Ensure the backend's role-based access control correctly identifies admin callers and that the frontend AdminPanel guard (which checks authentication and admin role) does not incorrectly reject valid admin principals. If no admin user exists in the backend, seed or allow the first registered user to be promoted to Admin role.",
       "target": "both",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-1"
         ],
         "quotes": [
-          "Push Notifications",
-          "Booking confirmation",
-          "Technician assigned",
-          "Service completed",
-          "Payment success",
-          "Offers",
-          "Implement push notification triggers"
+          "i don't acces admin panel"
         ]
       },
       "acceptanceCriteria": [
-        "Backend stores notification records linked to userId",
-        "Frontend polls or queries notifications on screen focus via React Query",
-        "Unread count badge appears on the bell icon",
-        "Marking notification as read updates isRead flag in backend",
-        "All five notification types are representable"
+        "A user with Admin role can load the AdminPanel without being blocked by the role guard.",
+        "The backend exposes a way to assign or verify admin role for a given principal.",
+        "If no admin exists, the backend allows an initial admin bootstrap (e.g., first caller or a hardcoded principal is granted admin role)."
       ]
     }
   ],
   "constraints": [
-    "Do NOT use Firebase, Firestore, or any external cloud database — use Motoko stable storage on the Internet Computer backend",
-    "Do NOT use React Native or Flutter — use React with TypeScript for all three frontends (Customer, Technician, Admin) as separate route-based views",
-    "Do NOT integrate external SMS/OTP providers — simulate OTP verification within the Motoko backend",
-    "Do NOT use WebSockets or Socket.io for real-time — use React Query polling for status updates",
-    "Do NOT use external push notification services (FCM, APNs) — implement in-app notification records in the backend",
-    "Frontend immutable paths (hooks/useInternetIdentity, hooks/useActor, main.tsx, components/ui) must not be modified",
-    "All backend logic must remain in a single Motoko actor in backend/main.mo"
+    "Do not modify files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui.",
+    "Preserve all existing routing logic for the Customer and Technician app modes."
   ],
   "nonGoals": [
-    "Native mobile app (iOS/Android) builds",
-    "Firebase, Firestore, or any third-party backend integration",
-    "Real SMS OTP delivery via Twilio or any SMS gateway",
-    "Real-time WebSocket connections",
-    "External push notifications (FCM / APNs)",
-    "GPS / geolocation API integration (location will be entered manually)",
-    "WhatsApp share API integration (referral code share will use clipboard copy)",
-    "Stripe or any external payment gateway processing (payment method selection only)",
-    "File/document upload for technician document approval (text fields only)",
-    "Email service integration"
+    "Redesigning the admin panel UI or adding new admin features.",
+    "Changing the authentication provider from Internet Identity.",
+    "Modifying the customer or technician frontend flows."
   ],
   "imageRequirements": {
-    "required": [
-      "Home service marketplace hero banner with clean illustration of a technician at work in a modern home, blue gradient background (banner-hero.dim_1200x400.png)",
-      "Service category icon set — 8 icons: Plumbing (wrench/pipe), Electrical (lightning bolt), Cleaning (broom/sparkle), AC Repair (snowflake/unit), Painting (brush/roller), Carpentry (hammer/wood), Appliance Repair (washing machine), Pest Control (bug/shield) — flat style, blue primary color on white circle background (cat-plumbing.dim_80x80.png, cat-electrical.dim_80x80.png, cat-cleaning.dim_80x80.png, cat-ac.dim_80x80.png, cat-painting.dim_80x80.png, cat-carpentry.dim_80x80.png, cat-appliance.dim_80x80.png, cat-pest.dim_80x80.png)",
-      "App logo mark — stylized house outline with a checkmark or wrench tool merged inside, blue and purple gradient, minimal flat design (app-logo.dim_256x256.png)",
-      "Promotional banner slide 1 — '50% off on first booking' offer banner, vibrant blue background, bold white text, abstract curved shapes (promo-banner-1.dim_1200x400.png)",
-      "Promotional banner slide 2 — 'Book a professional cleaner today' banner, light purple background, friendly illustration of a cleaning professional (promo-banner-2.dim_1200x400.png)"
-    ],
+    "required": [],
     "edits": []
   }
 }
