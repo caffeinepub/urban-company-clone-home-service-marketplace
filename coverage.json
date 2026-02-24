@@ -1,0 +1,437 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-24T15:28:54.887Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 25,
+    "implemented": 13,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "Define the Motoko backend data schema with stable storage for all core collections: users (id, phone, name, email, role, referralCode, walletBalance, savedAddresses, isBlocked, createdAt), technicians (id, phone, name, serviceArea, assignedCategories, commissionRate, status, documentsApproved, earnings, createdAt), services (id, categoryId, name, description, price, duration, imageUrl, isActive), categories (id, name, iconUrl, order), bookings (id, customerId, technicianId, serviceId, addressId, date, timeSlot, status, notes, bookingCode, paymentMethod, totalAmount, extraCharges, invoiceUrl, createdAt), payments (id, bookingId, customerId, method, amount, status, createdAt), wallets (userId, balance, transactions[]), reviews (id, bookingId, customerId, technicianId, rating, text, createdAt), referrals (referrerId, referredUserId, rewardGranted, createdAt).",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-10",
+        "summary": "Implement the review and rating endpoints: submitReview (customerId, bookingId, technicianId, rating 1–5, text — only callable after booking is Completed), getReviewsByTechnician, getReviewsByService.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-11",
+        "summary": "Implement the referral system: generateReferralCode (creates unique code for a user at registration), applyReferralCode (links referrer to referred user), grantReferralReward (adds wallet credit to referrer when referred user completes their first service), getReferralStats (referrer's total referrals and total rewards earned).",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-12",
+        "summary": "Implement Admin management endpoints: blockUser, unblockUser, addTechnician, assignServiceArea, approveDocument, suspendTechnician, reactivateTechnician, getAdminReports (daily revenue, monthly revenue, active bookings count, technician performance summary), setTechnicianCommission, createOffer, updateOffer, listOffers.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-13",
+        "summary": "Build the Customer-facing React frontend with three main view sets: (1) Auth screens — phone number entry, OTP verification input, auto-redirect on valid session; (2) Home screen — top location bar showing selected address, search bar, auto-scrolling banner slider, service categories grid with icons, featured services horizontal scroll section, bottom navigation tabs (Home, Bookings, Rewards, Account); (3) Service screens — category service list, service detail page with image, price, duration, reviews summary, and Add to Cart button.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/customer/AuthFlow.tsx",
+          "frontend/src/components/customer/ProfileSetupModal.tsx",
+          "frontend/src/components/customer/HomeScreen.tsx",
+          "frontend/src/components/customer/BottomNavigation.tsx",
+          "frontend/src/components/customer/ServiceListByCategory.tsx",
+          "frontend/src/components/customer/ServiceDetailPage.tsx",
+          "frontend/src/pages/CustomerApp.tsx",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/customer/AuthFlow.tsx",
+          "frontend/src/components/customer/ProfileSetupModal.tsx",
+          "frontend/src/components/customer/HomeScreen.tsx",
+          "frontend/src/components/customer/BottomNavigation.tsx",
+          "frontend/src/components/customer/ServiceListByCategory.tsx",
+          "frontend/src/components/customer/ServiceDetailPage.tsx",
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-14",
+        "summary": "Build the Customer booking flow screens: (1) Cart summary view with selected services; (2) Address selection screen showing saved addresses with option to add new; (3) Date & time slot picker; (4) Notes entry field; (5) Booking confirmation screen displaying unique booking ID, service summary, and selected payment method choice (Cash on Delivery, Online, Wallet).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/customer/CartSummary.tsx",
+          "frontend/src/components/customer/AddressSelection.tsx",
+          "frontend/src/components/customer/AddAddressModal.tsx",
+          "frontend/src/components/customer/DateTimeSlotPicker.tsx",
+          "frontend/src/components/customer/BookingNotesEntry.tsx",
+          "frontend/src/components/customer/BookingConfirmation.tsx",
+          "frontend/src/hooks/useBookingFlow.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/customer/CartSummary.tsx",
+          "frontend/src/components/customer/AddressSelection.tsx",
+          "frontend/src/components/customer/AddAddressModal.tsx",
+          "frontend/src/components/customer/DateTimeSlotPicker.tsx",
+          "frontend/src/components/customer/BookingNotesEntry.tsx",
+          "frontend/src/components/customer/BookingConfirmation.tsx",
+          "frontend/src/hooks/useBookingFlow.ts"
+        ]
+      },
+      {
+        "id": "REQ-15",
+        "summary": "Build the Customer bookings list and booking detail screens: bookings list with status badges (Pending, Assigned, On the Way, In Progress, Completed, Cancelled) filterable by status; booking detail showing technician info, live status timeline, invoice summary, and a submit review form (1–5 stars + text) that appears only for Completed bookings.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/customer/BookingsList.tsx",
+          "frontend/src/components/customer/BookingDetailPage.tsx",
+          "frontend/src/components/customer/ReviewSubmissionForm.tsx",
+          "frontend/src/components/customer/BookingsView.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/customer/BookingsView.tsx"
+        ]
+      },
+      {
+        "id": "REQ-16",
+        "summary": "Build the Customer Rewards/Wallet screen: shows current wallet balance, transaction history list, referral code display with a share button (copies code to clipboard), and referral stats (total referred users, total rewards earned).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/customer/RewardsWalletScreen.tsx",
+          "frontend/src/components/customer/RewardsView.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/customer/RewardsView.tsx"
+        ]
+      },
+      {
+        "id": "REQ-17",
+        "summary": "Build the Technician-facing React frontend: (1) OTP login screen; (2) Dashboard showing list of assigned jobs with customer name, service, time slot, and Accept/Reject action buttons; (3) Active job screen with step-by-step workflow buttons: Mark Reached → Mark Started → Add Extra Items (form to add item name + price) → Generate Final Bill preview → Mark Completed; (4) Earnings screen with tabs for Daily, Weekly, and Total views and a commission deduction breakdown.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/technician/TechnicianAuthFlow.tsx",
+          "frontend/src/components/technician/JobsDashboard.tsx",
+          "frontend/src/components/technician/ActiveJobScreen.tsx",
+          "frontend/src/components/technician/AddExtraItemsModal.tsx",
+          "frontend/src/components/technician/FinalBillPreview.tsx",
+          "frontend/src/components/technician/EarningsScreen.tsx",
+          "frontend/src/pages/TechnicianApp.tsx",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/TechnicianApp.tsx",
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-18",
+        "summary": "Build the Admin web panel React frontend with a sidebar navigation covering: Dashboard (summary cards), Users, Technicians, Bookings, Services & Categories, Offers, and Reports sections. Dashboard shows KPI cards: total bookings today, active bookings, total revenue today, and technician count.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/admin/AdminSidebar.tsx",
+          "frontend/src/components/admin/AdminDashboard.tsx",
+          "frontend/src/pages/AdminPanel.tsx",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/admin/AdminSidebar.tsx",
+          "frontend/src/components/admin/AdminDashboard.tsx",
+          "frontend/src/pages/AdminPanel.tsx",
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-19",
+        "summary": "Build Admin User Management screen: paginated table of all users with columns for name, phone, role, status, and join date. Each row has Block/Unblock toggle action. Clicking a row opens a user detail panel.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/admin/UsersManagement.tsx",
+          "frontend/src/components/admin/UserDetailPanel.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/admin/UsersManagement.tsx"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Implement role-based access control in the Motoko backend with three roles: Customer, Technician, and Admin. All update/query endpoints must validate the caller's role before executing. Admins have full access; Technicians can only access their own jobs and earnings; Customers can only access their own bookings, wallet, and profile.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-20",
+        "summary": "Build Admin Technician Management screen: table of all technicians with name, phone, service area, status (Active/Suspended/Pending), and documents approval state. Actions: Add Technician modal form, Approve Documents button, Assign Service Area input, Suspend/Reactivate toggle.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/admin/TechniciansManagement.tsx",
+          "frontend/src/components/admin/AddTechnicianModal.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/admin/TechniciansManagement.tsx"
+        ]
+      },
+      {
+        "id": "REQ-21",
+        "summary": "Build Admin Booking Management screen: full bookings table with filter tabs by status and date range picker. Each row shows booking ID, customer, technician, service, status, and amount. Actions: manually assign technician (dropdown of available technicians), change booking status via dropdown.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/admin/BookingsManagement.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/admin/BookingsManagement.tsx"
+        ]
+      },
+      {
+        "id": "REQ-22",
+        "summary": "Build Admin Services & Categories Management screen: category list with add/edit/delete; service list per category with add/edit modal (name, description, price, duration, image URL, active toggle) and commission rate setting per service or globally per technician.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/admin/ServicesManagement.tsx",
+          "frontend/src/components/admin/AddEditServiceModal.tsx",
+          "frontend/src/components/admin/CategoryManagementSection.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/admin/ServicesManagement.tsx"
+        ]
+      },
+      {
+        "id": "REQ-23",
+        "summary": "Build Admin Reports screen with two sub-tabs: Revenue (bar chart of daily revenue for last 30 days, monthly revenue summary table) and Performance (technician performance table showing completed jobs count, average rating, total earnings, commission paid). Use a charting approach compatible with React for the bar chart.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/admin/ReportsScreen.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/admin/ReportsScreen.tsx"
+        ]
+      },
+      {
+        "id": "REQ-24",
+        "summary": "Apply a consistent visual design system across all three frontends (Customer, Technician, Admin): white/off-white backgrounds, blue primary color (#2563EB) with purple accent (#7C3AED), rounded corners (border-radius 12–16px on cards), soft box shadows, minimal clean typography, and card-based layout patterns. Customer and Technician views should resemble a mobile app layout (max-width 430px centered). Admin panel uses full-width desktop layout with a fixed sidebar.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/index.css",
+          "frontend/tailwind.config.js",
+          "frontend/src/components/layouts/MobileContainer.tsx",
+          "frontend/src/components/layouts/AdminLayout.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/index.css",
+          "frontend/tailwind.config.js",
+          "frontend/src/components/layouts/MobileContainer.tsx",
+          "frontend/src/components/layouts/AdminLayout.tsx"
+        ]
+      },
+      {
+        "id": "REQ-25",
+        "summary": "Implement in-app notification state management: the backend should expose a notifications endpoint that stores notification records (userId, type, message, isRead, createdAt). The frontend should poll for unread notifications and display a notification bell with unread count badge in the Customer and Technician headers. Clicking it shows a dropdown list of recent notifications. Types include: BookingConfirmation, TechnicianAssigned, ServiceCompleted, PaymentSuccess, Offer.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/shared/NotificationBell.tsx",
+          "frontend/src/hooks/useNotifications.ts",
+          "frontend/src/components/customer/HomeScreen.tsx",
+          "frontend/src/components/technician/JobsDashboard.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/shared/NotificationBell.tsx",
+          "frontend/src/hooks/useNotifications.ts",
+          "frontend/src/components/customer/HomeScreen.tsx"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Implement user authentication endpoints in the Motoko backend: register user with phone number and role, verify OTP (simulated via a stored code), maintain session via Internet Identity principal, and logout (clear session token). Auto-login must be supported by re-checking the stored principal on subsequent calls.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Implement address management endpoints: saveAddress (adds to user's savedAddresses array), setDefaultAddress (marks one address as default), listAddresses (returns all saved addresses for a user), and deleteAddress.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-5",
+        "summary": "Implement service and category management endpoints: createCategory, listCategories, createService, updateService (price, duration, description, active flag), listServicesByCategory, getServiceDetails. Admins can create/update; all roles can read.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-6",
+        "summary": "Implement the booking lifecycle in the backend: createBooking (generates unique booking ID with prefix BK + timestamp + random suffix, sets status to Pending), assignTechnician (Admin or system assigns technicianId, updates status to Assigned), updateBookingStatus (accepts status transitions: Pending → Assigned → OnTheWay → InProgress → Completed | Cancelled), getBooking, listBookingsByCustomer, listBookingsByTechnician, listAllBookings (Admin).",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-7",
+        "summary": "Implement payment and wallet endpoints: recordPayment (stores payment record linked to bookingId, supports methods: CashOnDelivery, OnlinePayment, WalletDeduction), deductFromWallet, addToWallet (for referral rewards), getWalletBalance, generateInvoice (returns a structured invoice record for a completed booking including service items, extra charges, and total).",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-8",
+        "summary": "Implement the technician service workflow endpoints: markReached (sets status to OnTheWay), markStarted (sets status to InProgress), addExtraItems (appends extra items like pipe, gas, spare parts with price to the booking's extraCharges list), generateFinalBill (computes base price + extra charges total), markCompleted (sets status to Completed, triggers commission deduction from technician earnings).",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-9",
+        "summary": "Implement earnings endpoints for technicians: getDailyEarnings(date), getWeeklyEarnings(weekStartDate), getTotalEarnings, getCommissionDeductions — all filtered to the calling technician's records.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/authorization/MixinAuthorization.mo",
+    "backend/authorization/access-control.mo",
+    "backend/main.mo",
+    "backend/user-approval/approval.mo",
+    "build-request.json",
+    "build-template/Dockerfile",
+    "build-template/LICENSE",
+    "build-template/README.md",
+    "build-template/deploy.sh",
+    "build-template/icp.yaml",
+    "build-template/package.json",
+    "build-template/pnpm-lock.yaml",
+    "build-template/pnpm-workspace.yaml",
+    "build-template/scripts/prune-unused-images.js",
+    "build-template/scripts/resize-images.js",
+    "build-template/src/backend/canister.yaml",
+    "build-template/src/backend/system-idl/aaaaa-aa.did",
+    "build-template/src/frontend/canister.yaml",
+    "build-template/src/frontend/components.json",
+    "build-template/src/frontend/env.json",
+    "build-template/src/frontend/eslint-rules/no-bigint-in-query-keys.js",
+    "build-template/src/frontend/eslint-rules/require-internet-identity-provider.js",
+    "build-template/src/frontend/eslint.config.js",
+    "build-template/src/frontend/package.json",
+    "build-template/src/frontend/postcss.config.js",
+    "build-template/src/frontend/src/components/ui/accordion.tsx",
+    "build-template/src/frontend/src/components/ui/alert-dialog.tsx",
+    "build-template/src/frontend/src/components/ui/alert.tsx",
+    "build-template/src/frontend/src/components/ui/aspect-ratio.tsx",
+    "build-template/src/frontend/src/components/ui/avatar.tsx",
+    "build-template/src/frontend/src/components/ui/badge.tsx",
+    "build-template/src/frontend/src/components/ui/breadcrumb.tsx",
+    "build-template/src/frontend/src/components/ui/button.tsx",
+    "build-template/src/frontend/src/components/ui/calendar.tsx",
+    "build-template/src/frontend/src/components/ui/card.tsx",
+    "build-template/src/frontend/src/components/ui/carousel.tsx",
+    "build-template/src/frontend/src/components/ui/chart.tsx",
+    "build-template/src/frontend/src/components/ui/checkbox.tsx",
+    "build-template/src/frontend/src/components/ui/collapsible.tsx",
+    "build-template/src/frontend/src/components/ui/command.tsx",
+    "build-template/src/frontend/src/components/ui/context-menu.tsx",
+    "build-template/src/frontend/src/components/ui/dialog.tsx",
+    "build-template/src/frontend/src/components/ui/drawer.tsx",
+    "build-template/src/frontend/src/components/ui/dropdown-menu.tsx",
+    "build-template/src/frontend/src/components/ui/form.tsx",
+    "build-template/src/frontend/src/components/ui/hover-card.tsx",
+    "build-template/src/frontend/src/components/ui/input-otp.tsx",
+    "build-template/src/frontend/src/components/ui/input.tsx",
+    "build-template/src/frontend/src/components/ui/label.tsx",
+    "build-template/src/frontend/src/components/ui/menubar.tsx",
+    "build-template/src/frontend/src/components/ui/navigation-menu.tsx",
+    "build-template/src/frontend/src/components/ui/pagination.tsx",
+    "build-template/src/frontend/src/components/ui/popover.tsx",
+    "build-template/src/frontend/src/components/ui/progress.tsx",
+    "build-template/src/frontend/src/components/ui/radio-group.tsx",
+    "build-template/src/frontend/src/components/ui/resizable.tsx",
+    "build-template/src/frontend/src/components/ui/scroll-area.tsx",
+    "build-template/src/frontend/src/components/ui/select.tsx",
+    "build-template/src/frontend/src/components/ui/separator.tsx",
+    "build-template/src/frontend/src/components/ui/sheet.tsx",
+    "build-template/src/frontend/src/components/ui/sidebar.tsx",
+    "build-template/src/frontend/src/components/ui/skeleton.tsx",
+    "build-template/src/frontend/src/components/ui/slider.tsx",
+    "build-template/src/frontend/src/components/ui/sonner.tsx",
+    "build-template/src/frontend/src/components/ui/switch.tsx",
+    "build-template/src/frontend/src/components/ui/table.tsx",
+    "build-template/src/frontend/src/components/ui/tabs.tsx",
+    "build-template/src/frontend/src/components/ui/textarea.tsx",
+    "build-template/src/frontend/src/components/ui/toggle-group.tsx",
+    "build-template/src/frontend/src/components/ui/toggle.tsx",
+    "build-template/src/frontend/src/components/ui/tooltip.tsx",
+    "build-template/src/frontend/src/hooks/use-mobile.tsx",
+    "build-template/src/frontend/src/lib/utils.ts",
+    "build-template/src/frontend/tsconfig.json",
+    "build-template/src/frontend/vite.config.js",
+    "build-template/tsconfig.json",
+    "caffeine.lock.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/public/assets/generated/app-logo.dim_256x256.png",
+    "frontend/public/assets/generated/banner-hero.dim_1200x400.png",
+    "frontend/public/assets/generated/cat-plumbing.dim_80x80.png, cat-electrical.dim_80x80.png, cat-cleaning.dim_80x80.png, cat-ac.dim_80x80.png, cat-painting.dim_80x80.png, cat-carpentry.dim_80x80.png, cat-appliance.dim_80x80.png, cat-pest.dim_80x80.png",
+    "frontend/public/assets/generated/promo-banner-1.dim_1200x400.png",
+    "frontend/public/assets/generated/promo-banner-2.dim_1200x400.png",
+    "frontend/src/App.tsx",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/admin/AdminDashboard.tsx",
+    "frontend/src/components/admin/AdminSidebar.tsx",
+    "frontend/src/components/admin/BookingsManagement.tsx",
+    "frontend/src/components/admin/ReportsScreen.tsx",
+    "frontend/src/components/admin/ServicesManagement.tsx",
+    "frontend/src/components/admin/TechniciansManagement.tsx",
+    "frontend/src/components/admin/UsersManagement.tsx",
+    "frontend/src/components/customer/AccountView.tsx",
+    "frontend/src/components/customer/AddAddressModal.tsx",
+    "frontend/src/components/customer/AddressSelection.tsx",
+    "frontend/src/components/customer/AuthFlow.tsx",
+    "frontend/src/components/customer/BookingConfirmation.tsx",
+    "frontend/src/components/customer/BookingNotesEntry.tsx",
+    "frontend/src/components/customer/BookingsView.tsx",
+    "frontend/src/components/customer/BottomNavigation.tsx",
+    "frontend/src/components/customer/CartSummary.tsx",
+    "frontend/src/components/customer/DateTimeSlotPicker.tsx",
+    "frontend/src/components/customer/HomeScreen.tsx",
+    "frontend/src/components/customer/ProfileSetupModal.tsx",
+    "frontend/src/components/customer/RewardsView.tsx",
+    "frontend/src/components/customer/ServiceDetailPage.tsx",
+    "frontend/src/components/customer/ServiceListByCategory.tsx",
+    "frontend/src/components/layouts/AdminLayout.tsx",
+    "frontend/src/components/layouts/MobileContainer.tsx",
+    "frontend/src/components/shared/NotificationBell.tsx",
+    "frontend/src/config.ts",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useBookingFlow.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useNotifications.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/AdminPanel.tsx",
+    "frontend/src/pages/TechnicianApp.tsx",
+    "frontend/src/ui-summary.json",
+    "frontend/src/utils/StorageClient.ts",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

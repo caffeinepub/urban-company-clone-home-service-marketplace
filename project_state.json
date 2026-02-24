@@ -1,0 +1,344 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Full multi-panel home service marketplace app similar to Urban Company. Includes Customer Mobile App, Technician Mobile App, and Admin Web Panel. Backend uses Firebase (Auth, Firestore, Cloud Messaging). Clean modern UI with white background and blue/purple primary color.",
+  "architectural_notes": [
+    "Backend: Firebase Auth (phone/OTP), Firestore (realtime DB), Firebase Cloud Messaging (push notifications)",
+    "Three separate apps: Customer Mobile App, Technician Mobile App, Admin Web Panel",
+    "Role-based access: Customer / Technician / Admin enforced via Firestore security rules",
+    "Real-time booking status updates via Firestore listeners",
+    "Firestore collections: users, technicians, services, categories, bookings, payments, wallets, reviews, referrals",
+    "Design: white background, blue/purple primary, rounded corners, soft shadows, minimal UI"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Home service marketplace hero banner with clean illustration of a technician at work in a modern home, blue gradient background (banner-hero.dim_1200x400.png)\n- Service category icon set — 8 icons: Plumbing (wrench/pipe), Electrical (lightning bolt), Cleaning (broom/sparkle), AC Repair (snowflake/unit), Painting (brush/roller), Carpentry (hammer/wood), Appliance Repair (washing machine), Pest Control (bug/shield) — flat style, blue primary color on white circle background (cat-plumbing.dim_80x80.png, cat-electrical.dim_80x80.png, cat-cleaning.dim_80x80.png, cat-ac.dim_80x80.png, cat-painting.dim_80x80.png, cat-carpentry.dim_80x80.png, cat-appliance.dim_80x80.png, cat-pest.dim_80x80.png)\n- App logo mark — stylized house outline with a checkmark or wrench tool merged inside, blue and purple gradient, minimal flat design (app-logo.dim_256x256.png)\n- Promotional banner slide 1 — '50% off on first booking' offer banner, vibrant blue background, bold white text, abstract curved shapes (promo-banner-1.dim_1200x400.png)\n- Promotional banner slide 2 — 'Book a professional cleaner today' banner, light purple background, friendly illustration of a cleaning professional (promo-banner-2.dim_1200x400.png)",
+  "existing_features": [
+    {
+      "id": "feature-build-the-customer-facing-react-frontend-with-three-main-view-sets-1-auth-screens-phone-number-entry-otp-verification-input-auto-redirect-on-valid-session-2-home-screen-top-location-bar-showing-selected-address-search-bar-auto-scrolling-banner-slider-service-categories-grid-with-icons-featured-services-horizontal-scroll-section-bottom-navigation-tabs-home-bookings-rewards-account-3-service-screens-category-service-list-service-detail-page-with-image-price-duration-reviews-summary-and-add-to-cart-button",
+      "title": "Build the Customer-facing React frontend with three main view sets: (1) Auth screens — phone number entry, OTP verification input, auto-redirect on valid session; (2) Home screen — top location bar showing selected address, search bar, auto-scrolling banner slider, service categories grid with icons, featured services horizontal scroll section, bottom navigation tabs (Home, Bookings, Rewards, Account); (3) Service screens — category service list, service detail page with image, price, duration, reviews summary, and Add to Cart button.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-customer-booking-flow-screens-1-cart-summary-view-with-selected-services-2-address-selection-screen-showing-saved-addresses-with-option-to-add-new-3-date-time-slot-picker-4-notes-entry-field-5-booking-confirmation-screen-displaying-unique-booking-id-service-summary-and-selected-payment-method-choice-cash-on-delivery-online-wallet",
+      "title": "Build the Customer booking flow screens: (1) Cart summary view with selected services; (2) Address selection screen showing saved addresses with option to add new; (3) Date & time slot picker; (4) Notes entry field; (5) Booking confirmation screen displaying unique booking ID, service summary, and selected payment method choice (Cash on Delivery, Online, Wallet).",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-customer-bookings-list-and-booking-detail-screens-bookings-list-with-status-badges-pending-assigned-on-the-way-in-progress-completed-cancelled-filterable-by-status-booking-detail-showing-technician-info-live-status-timeline-invoice-summary-and-a-submit-review-form-1-5-stars-text-that-appears-only-for-completed-bookings",
+      "title": "Build the Customer bookings list and booking detail screens: bookings list with status badges (Pending, Assigned, On the Way, In Progress, Completed, Cancelled) filterable by status; booking detail showing technician info, live status timeline, invoice summary, and a submit review form (1–5 stars + text) that appears only for Completed bookings.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-customer-rewards-wallet-screen-shows-current-wallet-balance-transaction-history-list-referral-code-display-with-a-share-button-copies-code-to-clipboard-and-referral-stats-total-referred-users-total-rewards-earned",
+      "title": "Build the Customer Rewards/Wallet screen: shows current wallet balance, transaction history list, referral code display with a share button (copies code to clipboard), and referral stats (total referred users, total rewards earned).",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-technician-facing-react-frontend-1-otp-login-screen-2-dashboard-showing-list-of-assigned-jobs-with-customer-name-service-time-slot-and-accept-reject-action-buttons-3-active-job-screen-with-step-by-step-workflow-buttons-mark-reached-mark-started-add-extra-items-form-to-add-item-name-price-generate-final-bill-preview-mark-completed-4-earnings-screen-with-tabs-for-daily-weekly-and-total-views-and-a-commission-deduction-breakdown",
+      "title": "Build the Technician-facing React frontend: (1) OTP login screen; (2) Dashboard showing list of assigned jobs with customer name, service, time slot, and Accept/Reject action buttons; (3) Active job screen with step-by-step workflow buttons: Mark Reached → Mark Started → Add Extra Items (form to add item name + price) → Generate Final Bill preview → Mark Completed; (4) Earnings screen with tabs for Daily, Weekly, and Total views and a commission deduction breakdown.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-admin-web-panel-react-frontend-with-a-sidebar-navigation-covering-dashboard-summary-cards-users-technicians-bookings-services-categories-offers-and-reports-sections-dashboard-shows-kpi-cards-total-bookings-today-active-bookings-total-revenue-today-and-technician-count",
+      "title": "Build the Admin web panel React frontend with a sidebar navigation covering: Dashboard (summary cards), Users, Technicians, Bookings, Services & Categories, Offers, and Reports sections. Dashboard shows KPI cards: total bookings today, active bookings, total revenue today, and technician count.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-admin-user-management-screen-paginated-table-of-all-users-with-columns-for-name-phone-role-status-and-join-date-each-row-has-block-unblock-toggle-action-clicking-a-row-opens-a-user-detail-panel",
+      "title": "Build Admin User Management screen: paginated table of all users with columns for name, phone, role, status, and join date. Each row has Block/Unblock toggle action. Clicking a row opens a user detail panel.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-admin-technician-management-screen-table-of-all-technicians-with-name-phone-service-area-status-active-suspended-pending-and-documents-approval-state-actions-add-technician-modal-form-approve-documents-button-assign-service-area-input-suspend-reactivate-toggle",
+      "title": "Build Admin Technician Management screen: table of all technicians with name, phone, service area, status (Active/Suspended/Pending), and documents approval state. Actions: Add Technician modal form, Approve Documents button, Assign Service Area input, Suspend/Reactivate toggle.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-admin-booking-management-screen-full-bookings-table-with-filter-tabs-by-status-and-date-range-picker-each-row-shows-booking-id-customer-technician-service-status-and-amount-actions-manually-assign-technician-dropdown-of-available-technicians-change-booking-status-via-dropdown",
+      "title": "Build Admin Booking Management screen: full bookings table with filter tabs by status and date range picker. Each row shows booking ID, customer, technician, service, status, and amount. Actions: manually assign technician (dropdown of available technicians), change booking status via dropdown.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-admin-services-categories-management-screen-category-list-with-add-edit-delete-service-list-per-category-with-add-edit-modal-name-description-price-duration-image-url-active-toggle-and-commission-rate-setting-per-service-or-globally-per-technician",
+      "title": "Build Admin Services & Categories Management screen: category list with add/edit/delete; service list per category with add/edit modal (name, description, price, duration, image URL, active toggle) and commission rate setting per service or globally per technician.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-admin-reports-screen-with-two-sub-tabs-revenue-bar-chart-of-daily-revenue-for-last-30-days-monthly-revenue-summary-table-and-performance-technician-performance-table-showing-completed-jobs-count-average-rating-total-earnings-commission-paid-use-a-charting-approach-compatible-with-react-for-the-bar-chart",
+      "title": "Build Admin Reports screen with two sub-tabs: Revenue (bar chart of daily revenue for last 30 days, monthly revenue summary table) and Performance (technician performance table showing completed jobs count, average rating, total earnings, commission paid). Use a charting approach compatible with React for the bar chart.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-consistent-visual-design-system-across-all-three-frontends-customer-technician-admin-white-off-white-backgrounds-blue-primary-color-2563eb-with-purple-accent-7c3aed-rounded-corners-border-radius-12-16px-on-cards-soft-box-shadows-minimal-clean-typography-and-card-based-layout-patterns-customer-and-technician-views-should-resemble-a-mobile-app-layout-max-width-430px-centered-admin-panel-uses-full-width-desktop-layout-with-a-fixed-sidebar",
+      "title": "Apply a consistent visual design system across all three frontends (Customer, Technician, Admin): white/off-white backgrounds, blue primary color (#2563EB) with purple accent (#7C3AED), rounded corners (border-radius 12–16px on cards), soft box shadows, minimal clean typography, and card-based layout patterns. Customer and Technician views should resemble a mobile app layout (max-width 430px centered). Admin panel uses full-width desktop layout with a fixed sidebar.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-in-app-notification-state-management-the-backend-should-expose-a-notifications-endpoint-that-stores-notification-records-userid-type-message-isread-createdat-the-frontend-should-poll-for-unread-notifications-and-display-a-notification-bell-with-unread-count-badge-in-the-customer-and-technician-headers-clicking-it-shows-a-dropdown-list-of-recent-notifications-types-include-bookingconfirmation-technicianassigned-servicecompleted-paymentsuccess-offer",
+      "title": "Implement in-app notification state management: the backend should expose a notifications endpoint that stores notification records (userId, type, message, isRead, createdAt). The frontend should poll for unread notifications and display a notification bell with unread count badge in the Customer and Technician headers. Clicking it shows a dropdown list of recent notifications. Types include: BookingConfirmation, TechnicianAssigned, ServiceCompleted, PaymentSuccess, Offer.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Customer App: Phone/OTP auth, auto login session, logout",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Customer App: GPS auto-detect location, manual search, save multiple addresses, default address",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Customer App: Home screen with location bar, search, banner slider, service categories grid, featured services, bottom nav",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Customer App: Service module - list by category, details page, price/duration, add to cart, reviews & rating",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Customer App: Booking flow - address, date/time slot, notes, confirm, generate unique booking ID",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Customer App: Booking statuses - Pending, Assigned, On the way, In progress, Completed, Cancelled",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Customer App: Payments - Cash on delivery, online payment, wallet deduction, auto invoice generation",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Customer App: 1-5 star rating system with review text submission",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Customer App: Referral system - unique code, share via WhatsApp, wallet reward on completed service",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Customer App: Push notifications - booking confirmation, technician assigned, service completed, payment success, offers",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Technician App: OTP login, dashboard with assigned jobs, accept/reject job, view customer details",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Technician App: Service workflow - mark reached/started, add extra items/charges, generate final bill, mark completed",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Technician App: Earnings view - daily, weekly, total earnings, commission deduction view",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Admin Panel: User management - view and block users",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Admin Panel: Technician management - add, assign area, approve documents, suspend",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Admin Panel: Booking management - view all, filter by status, manually assign technician, change status",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Admin Panel: Price management - add/edit services, set technician commission, manage offers",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Admin Panel: Reports - daily/monthly revenue, active bookings, technician performance",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Firestore DB schema for collections: users, technicians, services, categories, bookings, payments, wallets, reviews, referrals",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Role-based access control: Customer / Technician / Admin with real-time status updates and push notification triggers",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Define the Motoko backend data schema with stable storage for all core collections: users (id, phone, name, email, role, referralCode, walletBalance, savedAddresses, isBlocked, createdAt), technicians (id, phone, name, serviceArea, assignedCategories, commissionRate, status, documentsApproved, earnings, createdAt), services (id, categoryId, name, description, price, duration, imageUrl, isActive), categories (id, name, iconUrl, order), bookings (id, customerId, technicianId, serviceId, addressId, date, timeSlot, status, notes, bookingCode, paymentMethod, totalAmount, extraCharges, invoiceUrl, createdAt), payments (id, bookingId, customerId, method, amount, status, createdAt), wallets (userId, balance, transactions[]), reviews (id, bookingId, customerId, technicianId, rating, text, createdAt), referrals (referrerId, referredUserId, rewardGranted, createdAt).",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Implement role-based access control in the Motoko backend with three roles: Customer, Technician, and Admin. All update/query endpoints must validate the caller's role before executing. Admins have full access; Technicians can only access their own jobs and earnings; Customers can only access their own bookings, wallet, and profile.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Implement user authentication endpoints in the Motoko backend: register user with phone number and role, verify OTP (simulated via a stored code), maintain session via Internet Identity principal, and logout (clear session token). Auto-login must be supported by re-checking the stored principal on subsequent calls.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Implement address management endpoints: saveAddress (adds to user's savedAddresses array), setDefaultAddress (marks one address as default), listAddresses (returns all saved addresses for a user), and deleteAddress.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-25",
+      "summary": "Implement service and category management endpoints: createCategory, listCategories, createService, updateService (price, duration, description, active flag), listServicesByCategory, getServiceDetails. Admins can create/update; all roles can read.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Implement the booking lifecycle in the backend: createBooking (generates unique booking ID with prefix BK + timestamp + random suffix, sets status to Pending), assignTechnician (Admin or system assigns technicianId, updates status to Assigned), updateBookingStatus (accepts status transitions: Pending → Assigned → OnTheWay → InProgress → Completed | Cancelled), getBooking, listBookingsByCustomer, listBookingsByTechnician, listAllBookings (Admin).",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Implement payment and wallet endpoints: recordPayment (stores payment record linked to bookingId, supports methods: CashOnDelivery, OnlinePayment, WalletDeduction), deductFromWallet, addToWallet (for referral rewards), getWalletBalance, generateInvoice (returns a structured invoice record for a completed booking including service items, extra charges, and total).",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Implement the technician service workflow endpoints: markReached (sets status to OnTheWay), markStarted (sets status to InProgress), addExtraItems (appends extra items like pipe, gas, spare parts with price to the booking's extraCharges list), generateFinalBill (computes base price + extra charges total), markCompleted (sets status to Completed, triggers commission deduction from technician earnings).",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "Implement earnings endpoints for technicians: getDailyEarnings(date), getWeeklyEarnings(weekStartDate), getTotalEarnings, getCommissionDeductions — all filtered to the calling technician's records.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-30",
+      "summary": "Implement the review and rating endpoints: submitReview (customerId, bookingId, technicianId, rating 1–5, text — only callable after booking is Completed), getReviewsByTechnician, getReviewsByService.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-31",
+      "summary": "Implement the referral system: generateReferralCode (creates unique code for a user at registration), applyReferralCode (links referrer to referred user), grantReferralReward (adds wallet credit to referrer when referred user completes their first service), getReferralStats (referrer's total referrals and total rewards earned).",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-32",
+      "summary": "Implement Admin management endpoints: blockUser, unblockUser, addTechnician, assignServiceArea, approveDocument, suspendTechnician, reactivateTechnician, getAdminReports (daily revenue, monthly revenue, active bookings count, technician performance summary), setTechnicianCommission, createOffer, updateOffer, listOffers.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Urban Company Clone - Home Service Marketplace",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

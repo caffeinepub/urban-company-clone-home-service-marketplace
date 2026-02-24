@@ -1,0 +1,418 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Home Service Marketplace Frontend - Customer, Technician & Admin Panels",
+  "requirements": [
+    {
+      "id": "REQ-13",
+      "summary": "Build Customer-facing frontend with Auth, Home screen, Service browsing, and bottom navigation",
+      "acceptanceCriteria": [
+        "Auth flow shows phone input → OTP screen → home on success",
+        "Home screen renders location bar, search, banner slider, categories grid, and featured section",
+        "Bottom navigation switches between Home, Bookings, Rewards, Account tabs",
+        "Service list filters by selected category",
+        "Service detail page shows price, duration, reviews count, and Add to Cart CTA"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/customer/AuthFlow.tsx",
+          "operation": "create",
+          "description": "Create customer authentication component with phone number entry screen and OTP verification input. Use the authorization component to handle login via useInternetIdentity hook. On successful login, check for user profile using getCallerUserProfile and redirect to profile setup if needed, otherwise redirect to home. Display loading states during authentication. Verify the authorization component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/customer/ProfileSetupModal.tsx",
+          "operation": "create",
+          "description": "Create modal for first-time user profile setup. Collect firstName, lastName, phone, and email. Call saveCallerUserProfile to store the profile. Show validation errors. Close modal and navigate to home after successful save. Verify the authorization component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/customer/HomeScreen.tsx",
+          "operation": "create",
+          "description": "Create customer home screen with location bar at top showing selected address (fetch from listAddresses and show default), search bar, auto-scrolling banner slider displaying generated images from frontend/public/assets/generated/promo-banner-1.dim_1200x400.png and frontend/public/assets/generated/promo-banner-2.dim_1200x400.png, service categories grid fetched via getTopActiveCategories displaying category icons from frontend/public/assets/generated/cat-*.dim_80x80.png, and featured services horizontal scroll section fetched via getCategoryWithServices. Use blue primary color (#2563EB) for highlights and rounded cards with soft shadows. Mobile-optimized layout with max-width 430px."
+        },
+        {
+          "path": "frontend/src/components/customer/BottomNavigation.tsx",
+          "operation": "create",
+          "description": "Create bottom navigation bar with four tabs: Home, Bookings, Rewards, Account. Each tab shows icon and label. Active tab uses primary blue (#2563EB). Clicking a tab switches the main view. Fixed at bottom of viewport on mobile layout."
+        },
+        {
+          "path": "frontend/src/components/customer/ServiceListByCategory.tsx",
+          "operation": "create",
+          "description": "Create service list screen that displays services for a selected category. Fetch services using getActiveServicesByCategory(categoryId). Display each service as a card showing image, name, price, duration, and a brief description. Clicking a service navigates to the service detail page. Use card-based layout with rounded corners (border-radius 12-16px) and soft shadows."
+        },
+        {
+          "path": "frontend/src/components/customer/ServiceDetailPage.tsx",
+          "operation": "create",
+          "description": "Create service detail page showing full service information fetched via getServiceDetails(serviceId). Display service image, name, full description, price, duration (in minutes), and a reviews summary section (placeholder for future implementation). Include an 'Add to Cart' button (blue #2563EB) that stores the service in local cart state and shows a success toast. Use clean white background with rounded card sections."
+        },
+        {
+          "path": "frontend/src/pages/CustomerApp.tsx",
+          "operation": "create",
+          "description": "Create main Customer app wrapper component that handles authentication state via useInternetIdentity. If not authenticated, show AuthFlow. If authenticated but no profile, show ProfileSetupModal. Otherwise render the main customer interface with BottomNavigation and content area that switches between HomeScreen, BookingsView, RewardsView, and AccountView based on active tab. Container max-width 430px centered for mobile-app feel."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add route for /customer that renders CustomerApp component. Ensure the customer route is registered and accessible from the main app navigation."
+        }
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "summary": "Build Customer booking flow: Cart, Address selection, Date/Time picker, Notes entry, and Confirmation",
+      "acceptanceCriteria": [
+        "Cart screen lists selected services with totals",
+        "Address screen shows saved addresses and default-marked option",
+        "Date picker prevents past dates; time slot grid shows available slots",
+        "Confirmation screen displays the generated booking ID prominently",
+        "Payment method selector shows all three options"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/customer/CartSummary.tsx",
+          "operation": "create",
+          "description": "Create cart summary view displaying selected services from local state. Show service name, price, and quantity. Calculate and display subtotal. Include 'Proceed to Book' button (blue #2563EB) that navigates to address selection. Allow removing items from cart. Use card layout with rounded corners and soft shadows."
+        },
+        {
+          "path": "frontend/src/components/customer/AddressSelection.tsx",
+          "operation": "create",
+          "description": "Create address selection screen that fetches saved addresses via listAddresses. Display each address as a selectable card with radio button. Highlight the default address. Include 'Add New Address' button that opens an address form modal. Selected address is stored in booking flow state. 'Continue' button navigates to date/time selection."
+        },
+        {
+          "path": "frontend/src/components/customer/AddAddressModal.tsx",
+          "operation": "create",
+          "description": "Create modal for adding a new address. Form collects name, phone, addressLine1, addressLine2, city, state, zip, and isDefault checkbox. Call saveAddress with the new address data. Show validation errors. Close modal and refresh address list on success."
+        },
+        {
+          "path": "frontend/src/components/customer/DateTimeSlotPicker.tsx",
+          "operation": "create",
+          "description": "Create date and time slot picker component. Date picker prevents selection of past dates. Time slot grid shows available slots (9 AM - 6 PM in 1-hour intervals, displayed as buttons). Selected date and time are stored in booking flow state. 'Continue' button navigates to notes entry screen."
+        },
+        {
+          "path": "frontend/src/components/customer/BookingNotesEntry.tsx",
+          "operation": "create",
+          "description": "Create notes entry screen with a text area for customer to add optional booking notes. Include 'Continue to Payment' button that navigates to booking confirmation screen. Notes are stored in booking flow state."
+        },
+        {
+          "path": "frontend/src/components/customer/BookingConfirmation.tsx",
+          "operation": "create",
+          "description": "Create booking confirmation screen showing full booking summary: selected services, total amount, selected address, date/time, and notes. Display payment method selector with three radio options: Cash on Delivery, Online Payment, Wallet Deduction. Show prominent 'Confirm Booking' button (blue #2563EB). On confirmation, the backend would create the booking and return a unique booking ID starting with 'BK'. Display the booking ID prominently in a success card with a checkmark icon. Include 'View Booking' button navigating to booking detail."
+        },
+        {
+          "path": "frontend/src/hooks/useBookingFlow.ts",
+          "operation": "create",
+          "description": "Create custom hook to manage booking flow state across multiple screens. Store cart items, selected address, date, time slot, notes, and payment method in React state or context. Provide functions to update each step and reset the flow after successful booking."
+        }
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "summary": "Build Customer bookings list and booking detail screens with status tracking and review submission",
+      "acceptanceCriteria": [
+        "Bookings list shows status chip with appropriate color for each status",
+        "Status filter tabs narrow the list",
+        "Booking detail shows a vertical status timeline",
+        "Review form is visible only when booking status is Completed and no review exists",
+        "Star rating widget accepts 1–5 selection"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/customer/BookingsList.tsx",
+          "operation": "create",
+          "description": "Create bookings list view with filter tabs for statuses: All, Pending, Assigned, On the Way, In Progress, Completed, Cancelled. Display each booking as a card showing booking ID, service name, date/time, technician name (if assigned), and status badge. Status badges use color coding: Pending (gray), Assigned (blue), On the Way (purple), In Progress (orange), Completed (green), Cancelled (red). Clicking a booking navigates to booking detail page. Bookings would be fetched from the backend (placeholder: use mock data for now)."
+        },
+        {
+          "path": "frontend/src/components/customer/BookingDetailPage.tsx",
+          "operation": "create",
+          "description": "Create booking detail page showing full booking information: booking ID, service details, customer address, date/time, technician info (name, phone if assigned), total amount, extra charges (if any), and invoice link. Display a vertical status timeline showing progression through Pending → Assigned → On the Way → In Progress → Completed, with completed steps highlighted in blue. For Completed bookings, show the review submission form if no review exists. Include 'Cancel Booking' button for non-completed bookings."
+        },
+        {
+          "path": "frontend/src/components/customer/ReviewSubmissionForm.tsx",
+          "operation": "create",
+          "description": "Create review submission form component with 1–5 star rating selector (interactive star icons) and text area for review text. Include 'Submit Review' button (blue #2563EB). On submit, the backend would store the review linked to the booking and technician (placeholder: show success toast for now). Form is only rendered when booking status is Completed."
+        },
+        {
+          "path": "frontend/src/components/customer/BookingsView.tsx",
+          "operation": "create",
+          "description": "Create wrapper component for the Bookings tab content. Renders BookingsList by default. Handles navigation to BookingDetailPage when a booking is selected. This component is displayed when the Bookings tab is active in BottomNavigation."
+        }
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "summary": "Build Customer Rewards/Wallet screen with balance, transaction history, referral code, and stats",
+      "acceptanceCriteria": [
+        "Wallet balance is displayed prominently",
+        "Transaction history shows each credit/debit with date and source",
+        "Referral code is shown in a styled card with a copy-to-clipboard button",
+        "Referral stats show count and total reward amount"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/customer/RewardsWalletScreen.tsx",
+          "operation": "create",
+          "description": "Create Rewards/Wallet screen displaying wallet balance prominently at the top (fetched from getCallerUserProfile walletBalance). Show transaction history list (placeholder: would be fetched from backend). Each transaction shows amount, type (credit/debit), date, and source description. Display referral section with referral code in a styled card (gradient background blue to purple), a 'Copy Code' button that copies to clipboard and shows a toast. Show referral stats: total referred users count and total rewards earned (placeholder: would be fetched from backend). Use card-based layout with rounded corners and soft shadows."
+        },
+        {
+          "path": "frontend/src/components/customer/RewardsView.tsx",
+          "operation": "create",
+          "description": "Create wrapper component for the Rewards tab content. Renders RewardsWalletScreen. This component is displayed when the Rewards tab is active in BottomNavigation."
+        }
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "summary": "Build Technician frontend with OTP login, Jobs Dashboard, Active Job workflow, and Earnings screen",
+      "acceptanceCriteria": [
+        "Dashboard lists all assigned jobs with Accept/Reject controls",
+        "Accepting a job navigates to the active job workflow screen",
+        "Workflow buttons appear sequentially based on current booking status",
+        "Extra items form allows adding multiple items with name and price",
+        "Final bill shows base price + extra items total",
+        "Earnings tabs switch between daily, weekly, and total aggregates"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/technician/TechnicianAuthFlow.tsx",
+          "operation": "create",
+          "description": "Create technician authentication component with phone number entry and OTP verification. Use the authorization component to handle login via useInternetIdentity hook. Check user role after login and ensure it is Technician. Redirect to dashboard on success. Display loading states. Verify the authorization component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/technician/JobsDashboard.tsx",
+          "operation": "create",
+          "description": "Create technician jobs dashboard displaying list of assigned jobs (placeholder: would be fetched from backend via listBookingsByTechnician). Each job card shows customer name, service name, address, date/time slot, and booking status. For Pending jobs, show Accept and Reject action buttons. Accepting a job navigates to ActiveJobScreen. Use card layout with blue primary color for buttons."
+        },
+        {
+          "path": "frontend/src/components/technician/ActiveJobScreen.tsx",
+          "operation": "create",
+          "description": "Create active job workflow screen showing current job details and sequential workflow buttons based on booking status: 'Mark Reached' (sets status to On the Way), 'Mark Started' (sets status to In Progress), 'Add Extra Items' button opening modal form, 'Generate Final Bill' showing bill preview, 'Mark Completed' button. Each button is only enabled when the previous step is completed. Display customer info, service details, and current status timeline. Use blue buttons and card layout."
+        },
+        {
+          "path": "frontend/src/components/technician/AddExtraItemsModal.tsx",
+          "operation": "create",
+          "description": "Create modal for adding extra items/charges during service. Form allows adding multiple items, each with name and price fields. Include 'Add Another Item' button to append more rows. Display running total of extra charges. 'Save' button stores extra items in the booking (backend would handle via addExtraItems endpoint). Close modal after save."
+        },
+        {
+          "path": "frontend/src/components/technician/FinalBillPreview.tsx",
+          "operation": "create",
+          "description": "Create final bill preview component showing base service price, list of extra items with individual prices, and total amount (base + extras). Display in a card with clear line items. Include 'Confirm and Complete' button to mark the job as completed. Use rounded card with soft shadow."
+        },
+        {
+          "path": "frontend/src/components/technician/EarningsScreen.tsx",
+          "operation": "create",
+          "description": "Create earnings screen with three tabs: Daily, Weekly, and Total. Each tab fetches and displays earnings data (placeholder: would be fetched from backend via getDailyEarnings, getWeeklyEarnings, getTotalEarnings). Show earnings amount prominently, list of completed bookings contributing to earnings, and a commission deductions breakdown section showing deducted amounts per booking. Use card-based layout with blue accent color for headers."
+        },
+        {
+          "path": "frontend/src/pages/TechnicianApp.tsx",
+          "operation": "create",
+          "description": "Create main Technician app wrapper component handling authentication via useInternetIdentity. If not authenticated, show TechnicianAuthFlow. If authenticated and role is Technician, render main technician interface with navigation between JobsDashboard, ActiveJobScreen, and EarningsScreen. Container max-width 430px centered for mobile-app feel. If user role is not Technician, show an access denied message."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add route for /technician that renders TechnicianApp component. Ensure the technician route is registered and accessible."
+        }
+      ]
+    },
+    {
+      "id": "REQ-18",
+      "summary": "Build Admin web panel with sidebar navigation and Dashboard showing KPI cards",
+      "acceptanceCriteria": [
+        "Sidebar navigation links to all major admin sections",
+        "Dashboard renders four KPI summary cards",
+        "All admin sections are reachable from the sidebar without page reload"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/admin/AdminSidebar.tsx",
+          "operation": "create",
+          "description": "Create fixed left sidebar navigation for admin panel. Include links to: Dashboard, Users, Technicians, Bookings, Services & Categories, Offers, and Reports sections. Highlight active section. Use blue primary color (#2563EB) for active link. Sidebar is always visible on desktop layout."
+        },
+        {
+          "path": "frontend/src/components/admin/AdminDashboard.tsx",
+          "operation": "create",
+          "description": "Create admin dashboard showing four KPI summary cards: Total Bookings Today, Active Bookings, Total Revenue Today, and Technician Count. Each card displays the metric prominently with an icon. Cards use white background with soft shadows and rounded corners. Metrics would be fetched from backend getAdminReports endpoint (placeholder: use mock data for now)."
+        },
+        {
+          "path": "frontend/src/pages/AdminPanel.tsx",
+          "operation": "create",
+          "description": "Create main Admin panel wrapper component with full-width desktop layout. Left sidebar renders AdminSidebar. Main content area switches between different admin sections based on active route: AdminDashboard, UsersManagement, TechniciansManagement, BookingsManagement, ServicesManagement, OffersManagement, ReportsScreen. Check user role via isCallerAdmin and show access denied screen if not admin. Use the authorization component to handle authentication. Verify the authorization component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add route for /admin that renders AdminPanel component. Ensure the admin route is registered and protected by admin role check."
+        }
+      ]
+    },
+    {
+      "id": "REQ-19",
+      "summary": "Build Admin User Management screen with paginated user table, Block/Unblock actions, and user detail panel",
+      "acceptanceCriteria": [
+        "Users table is paginated with at least 20 rows per page",
+        "Block/Unblock button reflects current isBlocked state",
+        "Blocking a user shows confirmation dialog before proceeding",
+        "User detail panel shows bookings count and wallet balance"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/admin/UsersManagement.tsx",
+          "operation": "create",
+          "description": "Create user management screen with paginated table displaying all users (fetched via listApprovals to get approval status and user principals, then getUserProfile for details). Table columns: Name, Phone, Role, Status (approved/pending/blocked), Join Date. Pagination shows 20 rows per page. Each row has a Block/Unblock toggle button. Clicking a row opens UserDetailPanel. Use card-based table with rounded corners. Block action shows confirmation dialog before calling the backend (placeholder: blockUser endpoint)."
+        },
+        {
+          "path": "frontend/src/components/admin/UserDetailPanel.tsx",
+          "operation": "create",
+          "description": "Create user detail panel (modal or side panel) showing full user profile: name, phone, email, role, referral code, wallet balance, saved addresses count, and total bookings count (placeholder: would be fetched from backend). Include 'Close' button. Display in a card with rounded corners and soft shadow."
+        }
+      ]
+    },
+    {
+      "id": "REQ-20",
+      "summary": "Build Admin Technician Management screen with table, Add Technician modal, document approval, and service area assignment",
+      "acceptanceCriteria": [
+        "Add Technician modal collects name, phone, service area, commission rate",
+        "Approve Documents button updates documentsApproved to true",
+        "Suspend/Reactivate toggle changes technician status with confirmation",
+        "Service area is editable inline or via modal"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/admin/TechniciansManagement.tsx",
+          "operation": "create",
+          "description": "Create technician management screen with table displaying all technicians (placeholder: would be fetched from backend via listTechnicians). Table columns: Name, Phone, Service Area, Status (Active/Suspended/Pending), Documents Approved (Yes/No). Actions: 'Add Technician' button opening AddTechnicianModal, 'Approve Documents' button (enabled if not yet approved), 'Assign Service Area' inline edit or modal, Suspend/Reactivate toggle with confirmation dialog. Use card-based table layout."
+        },
+        {
+          "path": "frontend/src/components/admin/AddTechnicianModal.tsx",
+          "operation": "create",
+          "description": "Create modal for adding a new technician. Form collects name, phone, service area (text input), and commission rate (percentage 0-100). 'Save' button calls backend addTechnician endpoint (placeholder: show success toast). Form validation ensures commission rate is between 0 and 100. Close modal after successful save."
+        }
+      ]
+    },
+    {
+      "id": "REQ-21",
+      "summary": "Build Admin Booking Management screen with filterable bookings table, manual technician assignment, and status changes",
+      "acceptanceCriteria": [
+        "Status filter tabs update the displayed booking list",
+        "Date range picker filters bookings by createdAt date",
+        "Assign Technician dropdown shows only active technicians",
+        "Status change dropdown validates allowed transitions"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/admin/BookingsManagement.tsx",
+          "operation": "create",
+          "description": "Create booking management screen with filter tabs by status: All, Pending, Assigned, On the Way, In Progress, Completed, Cancelled. Include date range picker to filter by booking date. Display bookings table with columns: Booking ID, Customer Name, Technician Name, Service, Status, Amount. Actions: 'Assign Technician' dropdown (shows only active technicians, calls backend assignTechnician endpoint), 'Change Status' dropdown (validates status transitions, calls backend updateBookingStatus endpoint). Use card-based table with pagination. Bookings fetched via listAllBookings with status and date filters (placeholder: mock data)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-22",
+      "summary": "Build Admin Services & Categories Management screen with CRUD for categories and services, and commission rate setting",
+      "acceptanceCriteria": [
+        "Category CRUD operations work without page reload",
+        "Service add/edit modal validates price (positive number) and duration (positive integer)",
+        "Commission rate field accepts percentage 0–100",
+        "Active toggle immediately reflects on service availability"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/admin/ServicesManagement.tsx",
+          "operation": "create",
+          "description": "Create services and categories management screen. Display category list with Add, Edit, Delete actions using createCategory, updateCategoryOrder, and deleteCategory (to be implemented). Selecting a category shows its services list. Each service row has Edit and Delete actions, and an Active toggle (calls updateService with active flag). 'Add Service' button opens AddEditServiceModal. Use card-based layout with rounded corners."
+        },
+        {
+          "path": "frontend/src/components/admin/AddEditServiceModal.tsx",
+          "operation": "create",
+          "description": "Create modal for adding or editing a service. Form collects categoryId (dropdown), name, description, price (positive number validation), duration (positive integer validation, in minutes), imageUrl, and active (checkbox). For edit mode, pre-fill form with existing service data. 'Save' button calls createService (for new) or updateService (for edit). Show validation errors. Close modal after successful save and refresh service list."
+        },
+        {
+          "path": "frontend/src/components/admin/CategoryManagementSection.tsx",
+          "operation": "create",
+          "description": "Create category management section within ServicesManagement. Display list of categories fetched via listCategories. Each row shows category name, iconUrl, and order. Include Add, Edit, Delete buttons. Edit opens a simple modal collecting name and iconUrl. Delete shows confirmation dialog. Add button opens same modal for creating new category. Use inline forms or modals for CRUD."
+        }
+      ]
+    },
+    {
+      "id": "REQ-23",
+      "summary": "Build Admin Reports screen with Revenue bar chart and Technician Performance table",
+      "acceptanceCriteria": [
+        "Revenue bar chart renders 30 data points",
+        "Monthly revenue table groups revenue by calendar month",
+        "Technician performance table is sortable by completed jobs and earnings",
+        "Reports data is fetched from the backend via React Query"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/admin/ReportsScreen.tsx",
+          "operation": "create",
+          "description": "Create reports screen with two sub-tabs: Revenue and Performance. Revenue tab shows a bar chart of daily revenue for the last 30 days (use a React charting library compatible with the project, e.g., recharts) and a monthly revenue summary table grouping by month. Performance tab shows technician performance table with columns: Technician Name, Completed Jobs, Average Rating, Total Earnings, Commission Paid. Table is sortable by completed jobs and earnings. Reports data would be fetched via getAdminReports endpoint using React Query (placeholder: use mock data for initial implementation)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "summary": "Apply consistent visual design system across all frontends: blue/purple color scheme, rounded cards, mobile/desktop layouts",
+      "acceptanceCriteria": [
+        "Primary color #2563EB and accent #7C3AED are used consistently across buttons, badges, and highlights",
+        "All cards have visible border-radius and soft shadow",
+        "Customer and Technician views are contained in a max-width 430px centered container",
+        "Admin panel has a fixed left sidebar and scrollable main content area",
+        "Typography is clean with appropriate heading hierarchy"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Update global styles to define CSS custom properties for primary color (#2563EB), accent color (#7C3AED), white/off-white backgrounds, and soft shadow values. Apply clean minimal typography with appropriate font-family, heading sizes, and spacing. Set base border-radius to 12-16px for card components. Ensure these styles are available globally for all components."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Extend Tailwind theme to include custom color palette: primary blue (#2563EB), accent purple (#7C3AED), and status colors (gray for pending, orange for in-progress, green for completed, red for cancelled). Define custom border-radius values (12px, 16px) and box-shadow utilities for soft shadows. These Tailwind utilities will be used consistently across all components."
+        },
+        {
+          "path": "frontend/src/components/layouts/MobileContainer.tsx",
+          "operation": "create",
+          "description": "Create a responsive layout component for Customer and Technician views. Container has max-width 430px, centered horizontally, with white/off-white background. This wrapper is used by CustomerApp and TechnicianApp to create a mobile-app feel on all screen sizes."
+        },
+        {
+          "path": "frontend/src/components/layouts/AdminLayout.tsx",
+          "operation": "create",
+          "description": "Create full-width desktop layout component for Admin panel. Fixed left sidebar (250px width) with AdminSidebar. Main content area is scrollable and takes remaining width. Use white background for main content and light gray background for sidebar. This wrapper is used by AdminPanel."
+        }
+      ]
+    },
+    {
+      "id": "REQ-25",
+      "summary": "Implement in-app notification state management with polling, unread badge, and notification dropdown",
+      "acceptanceCriteria": [
+        "Frontend polls or queries notifications on screen focus via React Query",
+        "Unread count badge appears on the bell icon",
+        "Marking notification as read updates isRead flag in backend",
+        "All five notification types are representable"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/shared/NotificationBell.tsx",
+          "operation": "create",
+          "description": "Create notification bell icon component with unread count badge. Clicking the bell toggles a dropdown list of recent notifications. Fetch notifications via React Query polling (placeholder: would call backend getNotifications endpoint). Display each notification with type icon, message, and timestamp. Unread notifications are highlighted. Clicking a notification marks it as read (placeholder: would call backend markNotificationAsRead endpoint). Badge shows count of unread notifications. Use blue primary color for bell icon and badge."
+        },
+        {
+          "path": "frontend/src/hooks/useNotifications.ts",
+          "operation": "create",
+          "description": "Create custom hook to fetch and manage notifications using React Query. Poll for new notifications every 30 seconds when user is active. Provide functions to mark notifications as read and get unread count. Return notifications list, unread count, and loading state. Notifications data structure includes: userId, type (BookingConfirmation, TechnicianAssigned, ServiceCompleted, PaymentSuccess, Offer), message, isRead, createdAt (placeholder: would integrate with backend notifications endpoint)."
+        },
+        {
+          "path": "frontend/src/components/customer/HomeScreen.tsx",
+          "operation": "modify",
+          "description": "Add NotificationBell component to the top-right corner of the customer home screen header, next to the location bar. Ensure it is visible and accessible."
+        },
+        {
+          "path": "frontend/src/components/technician/JobsDashboard.tsx",
+          "operation": "modify",
+          "description": "Add NotificationBell component to the top-right corner of the technician dashboard header. Ensure it is visible and accessible."
+        }
+      ]
+    }
+  ]
+}
